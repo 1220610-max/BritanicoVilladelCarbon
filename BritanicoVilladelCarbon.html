@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Británico Villa del Carbón</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1a2744;--navy-deep:#0e1628;--crimson:#9b1c2e;
+  --gold:#c8a84b;--gold-light:#e8c87a;
+  --cream:#f8f4ed;--cream-dark:#ede8df;
+  --white:#ffffff;--slate:#4a5568;
+  --green:#2d6a4f;--green-light:#40916c;
+  --sky:#1e6fa8;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Crimson Pro',serif;background:var(--cream);color:var(--navy-deep);min-height:100vh;}
+
+/* ─── LOGIN ─── */
+#login-page{
+  min-height:100vh;background:var(--navy-deep);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+#login-page::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 60px,rgba(200,168,75,.04) 60px,rgba(200,168,75,.04) 61px),
+             repeating-linear-gradient(90deg,transparent,transparent 60px,rgba(200,168,75,.04) 60px,rgba(200,168,75,.04) 61px);
+}
+.union-jack-accent{
+  position:absolute;top:-80px;right:-80px;width:300px;height:300px;opacity:.035;
+  background:conic-gradient(from 0deg,var(--crimson) 0 15%,var(--white) 15% 22%,var(--navy) 22% 37%,var(--white) 37% 44%,var(--crimson) 44% 56%,var(--white) 56% 63%,var(--navy) 63% 78%,var(--white) 78% 85%,var(--crimson) 85%);
+  border-radius:50%;
+}
+.login-corner{position:absolute;width:100px;height:100px;opacity:.12;}
+.login-corner.tl{top:20px;left:20px;border-top:2px solid var(--gold);border-left:2px solid var(--gold);}
+.login-corner.tr{top:20px;right:20px;border-top:2px solid var(--gold);border-right:2px solid var(--gold);}
+.login-corner.bl{bottom:20px;left:20px;border-bottom:2px solid var(--gold);border-left:2px solid var(--gold);}
+.login-corner.br{bottom:20px;right:20px;border-bottom:2px solid var(--gold);border-right:2px solid var(--gold);}
+
+.floating-letters{
+  position:absolute;bottom:30px;left:0;right:0;
+  display:flex;justify-content:center;gap:20px;flex-wrap:wrap;
+  opacity:.06;pointer-events:none;
+}
+.floating-letters span{
+  font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:900;color:var(--gold);
+  animation:floatLetter 4s ease-in-out infinite;
+}
+.floating-letters span:nth-child(2n){animation-delay:.5s;}
+.floating-letters span:nth-child(3n){animation-delay:1s;}
+@keyframes floatLetter{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+
+.login-container{position:relative;z-index:1;text-align:center;animation:fadeUp .8s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+.school-crest{
+  width:120px;height:120px;margin:0 auto 18px;
+  background:var(--gold);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:52px;
+  box-shadow:0 0 60px rgba(200,168,75,.35),0 0 0 8px rgba(200,168,75,.1);
+  animation:pulseGold 3s ease-in-out infinite;
+}
+@keyframes pulseGold{0%,100%{box-shadow:0 0 60px rgba(200,168,75,.35),0 0 0 8px rgba(200,168,75,.1);}50%{box-shadow:0 0 90px rgba(200,168,75,.55),0 0 0 14px rgba(200,168,75,.15);}}
+.school-title{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:900;color:var(--gold);letter-spacing:2px;}
+.school-subtitle{font-size:1rem;color:rgba(255,255,255,.45);letter-spacing:4px;text-transform:uppercase;margin-top:4px;margin-bottom:35px;}
+.divider-ornament{display:flex;align-items:center;gap:12px;margin:0 auto 35px;width:320px;}
+.divider-ornament span{flex:1;height:1px;background:rgba(200,168,75,.3);}
+.divider-ornament em{color:var(--gold);font-style:normal;}
+
+.login-tabs{display:flex;background:rgba(255,255,255,.04);border:1px solid rgba(200,168,75,.2);border-radius:8px 8px 0 0;overflow:hidden;width:380px;margin:0 auto;}
+.login-tab{flex:1;padding:13px;background:transparent;border:none;color:rgba(255,255,255,.4);font-family:'Playfair Display',serif;font-size:.9rem;cursor:pointer;transition:all .3s;letter-spacing:1px;}
+.login-tab.active{background:rgba(200,168,75,.15);color:var(--gold);border-bottom:2px solid var(--gold);}
+.login-tab:hover:not(.active){background:rgba(255,255,255,.05);color:rgba(255,255,255,.7);}
+
+.login-form-box{background:rgba(255,255,255,.04);border:1px solid rgba(200,168,75,.2);border-top:none;border-radius:0 0 8px 8px;padding:32px;width:380px;margin:0 auto;}
+.login-form{display:none;}
+.login-form.active{display:block;animation:fadeIn .4s ease;}
+.form-group{margin-bottom:18px;text-align:left;}
+.form-group label{display:block;color:rgba(255,255,255,.5);font-size:.75rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:7px;}
+.form-group input,.form-group select{width:100%;padding:11px 15px;background:rgba(255,255,255,.06);border:1px solid rgba(200,168,75,.25);border-radius:5px;color:white;font-family:'Crimson Pro',serif;font-size:1rem;transition:border-color .3s;outline:none;}
+.form-group input:focus,.form-group select:focus{border-color:var(--gold);background:rgba(200,168,75,.08);}
+.form-group select option{background:var(--navy-deep);}
+.btn-login{width:100%;padding:13px;background:linear-gradient(135deg,var(--gold),var(--gold-light));border:none;border-radius:5px;color:var(--navy-deep);font-family:'Playfair Display',serif;font-weight:700;font-size:.95rem;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .3s;margin-top:8px;}
+.btn-login:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(200,168,75,.4);}
+.login-error{color:#ff6b6b;font-size:.88rem;margin-top:12px;display:none;text-align:center;}
+
+/* ─── HEADER ─── */
+.dashboard-header{background:var(--navy-deep);padding:0 40px;display:flex;align-items:center;justify-content:space-between;height:68px;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,.35);}
+.header-logo{display:flex;align-items:center;gap:14px;}
+.header-logo-icon{width:40px;height:40px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.header-logo-text{font-family:'Playfair Display',serif;color:var(--gold);font-size:1.15rem;font-weight:700;letter-spacing:1px;}
+.header-logo-text span{display:block;font-family:'Crimson Pro',serif;font-size:.7rem;color:rgba(255,255,255,.4);font-weight:300;letter-spacing:2px;text-transform:uppercase;}
+.header-right{display:flex;align-items:center;gap:18px;}
+.header-user-name{color:white;font-family:'Playfair Display',serif;font-size:.95rem;}
+.header-user-id{color:rgba(255,255,255,.4);font-size:.75rem;letter-spacing:2px;text-align:right;}
+.btn-logout{padding:7px 18px;background:transparent;border:1px solid rgba(200,168,75,.3);border-radius:4px;color:var(--gold);font-family:'Crimson Pro',serif;font-size:.88rem;cursor:pointer;transition:all .3s;letter-spacing:1px;}
+.btn-logout:hover{background:rgba(200,168,75,.12);border-color:var(--gold);}
+
+/* permission badge */
+.perm-badge{padding:3px 12px;border-radius:20px;font-size:.72rem;letter-spacing:1px;text-transform:uppercase;font-family:'Crimson Pro',serif;}
+.perm-badge.director{background:rgba(155,28,46,.3);color:#ff9aaa;border:1px solid rgba(155,28,46,.5);}
+.perm-badge.coordinacion{background:rgba(30,111,168,.3);color:#7ec8f7;border:1px solid rgba(30,111,168,.5);}
+.perm-badge.maestro{background:rgba(45,106,79,.3);color:#7ee8b8;border:1px solid rgba(45,106,79,.5);}
+.perm-badge.cambridge{background:rgba(200,168,75,.2);color:var(--gold-light);border:1px solid rgba(200,168,75,.4);}
+
+/* ─── TABS NAV ─── */
+.tabs-nav{background:var(--navy);display:flex;padding:0 40px;overflow-x:auto;scrollbar-width:none;border-bottom:2px solid var(--gold);}
+.tabs-nav::-webkit-scrollbar{display:none;}
+.tab-btn{padding:15px 22px;background:transparent;border:none;color:rgba(255,255,255,.4);font-family:'Crimson Pro',serif;font-size:.93rem;cursor:pointer;letter-spacing:.5px;white-space:nowrap;transition:all .3s;border-bottom:3px solid transparent;margin-bottom:-2px;display:flex;align-items:center;gap:7px;}
+.tab-btn:hover{color:rgba(255,255,255,.8);background:rgba(255,255,255,.04);}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(200,168,75,.08);}
+
+/* ─── TAB CONTENT ─── */
+.tab-content{display:none;padding:35px;animation:fadeUp .4s ease;}
+.tab-content.active{display:block;}
+.page-title{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--navy-deep);margin-bottom:6px;}
+.page-subtitle{color:var(--slate);font-size:.98rem;margin-bottom:28px;}
+.ornament-line{display:flex;align-items:center;gap:12px;margin-bottom:30px;}
+.ornament-line .ln{flex:0 0 36px;height:2px;background:var(--gold);}
+.ornament-line .dm{color:var(--gold);font-size:.65rem;}
+.ornament-line .ln2{flex:1;height:1px;background:var(--cream-dark);}
+
+/* ─── ESTADO DE CUENTA ─── */
+.account-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:18px;margin-bottom:30px;}
+.summary-card{border-radius:10px;padding:20px;text-align:center;color:white;}
+.summary-card.paid{background:linear-gradient(135deg,var(--green),var(--green-light));}
+.summary-card.pending{background:linear-gradient(135deg,#8b4513,#cd853f);}
+.summary-card.total{background:linear-gradient(135deg,var(--navy-deep),var(--navy));border:1px solid rgba(200,168,75,.3);}
+.summary-card.debt{background:linear-gradient(135deg,#6b2737,var(--crimson));}
+.summary-card .amount{font-size:1.9rem;font-weight:700;font-family:'Playfair Display',serif;}
+.summary-card .lbl{font-size:.72rem;letter-spacing:2px;text-transform:uppercase;opacity:.7;margin-top:4px;}
+
+.blocks-title{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--navy-deep);margin-bottom:18px;display:flex;align-items:center;gap:10px;}
+.blocks-title::after{content:'';flex:1;height:1px;background:var(--cream-dark);}
+.blocks-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:30px;}
+.block-item{border-radius:12px;padding:18px 12px;text-align:center;border:2px solid transparent;transition:all .3s;position:relative;overflow:hidden;}
+.block-item.paid{background:linear-gradient(135deg,rgba(45,106,79,.1),rgba(64,145,108,.06));border-color:var(--green-light);}
+.block-item.pending{background:white;border-color:var(--cream-dark);box-shadow:0 2px 8px rgba(0,0,0,.05);}
+.block-num{font-family:'Playfair Display',serif;font-size:.7rem;color:var(--slate);letter-spacing:1px;margin-bottom:5px;}
+.block-amount{font-size:1rem;font-weight:600;color:var(--navy-deep);}
+.block-status{font-size:.68rem;margin-top:5px;padding:3px 8px;border-radius:20px;display:inline-block;}
+.block-item.paid .block-status{background:rgba(45,106,79,.15);color:var(--green);}
+.block-item.pending .block-status{background:rgba(200,168,75,.12);color:#7a5c10;}
+.block-date{font-size:.68rem;color:var(--slate);margin-top:5px;display:block;}
+.block-check{position:absolute;top:6px;right:8px;font-size:.8rem;opacity:.7;}
+
+.payment-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.payment-info-box{background:white;border-radius:10px;padding:24px;box-shadow:0 2px 15px rgba(0,0,0,.06);border-top:3px solid var(--navy);}
+.payment-info-box.bank2{border-top-color:var(--gold);}
+.payment-info-title{font-family:'Playfair Display',serif;font-size:1rem;color:var(--navy-deep);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.info-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--cream-dark);font-size:.93rem;}
+.info-row:last-child{border-bottom:none;}
+.info-label{color:var(--slate);font-size:.83rem;}
+.info-value{font-weight:600;color:var(--navy-deep);}
+.info-value.mono{font-family:monospace;font-size:1.05rem;letter-spacing:1px;}
+.transfer-reqs{background:rgba(26,39,68,.04);border-radius:8px;padding:16px;margin-top:16px;border-left:3px solid var(--navy);}
+.transfer-reqs h4{font-family:'Playfair Display',serif;font-size:.85rem;color:var(--navy-deep);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;}
+.transfer-reqs ul{list-style:none;}
+.transfer-reqs ul li{font-size:.87rem;color:var(--slate);padding:3px 0;display:flex;gap:7px;align-items:flex-start;}
+.transfer-reqs ul li::before{content:'◆';color:var(--gold);font-size:.45rem;margin-top:5px;flex-shrink:0;}
+
+/* ─── CALIFICACIONES ─── */
+.eval-selector{display:flex;gap:10px;margin-bottom:22px;}
+.eval-btn{padding:9px 22px;background:white;border:2px solid var(--cream-dark);border-radius:6px;font-family:'Playfair Display',serif;font-size:.88rem;cursor:pointer;transition:all .3s;color:var(--slate);}
+.eval-btn.active{background:var(--navy);border-color:var(--navy);color:white;}
+.eval-btn:hover:not(.active){border-color:var(--navy);color:var(--navy);}
+
+.grades-card{background:white;border-radius:12px;box-shadow:0 2px 18px rgba(0,0,0,.07);overflow:hidden;margin-bottom:22px;}
+.grades-header{background:var(--navy-deep);padding:18px 28px;display:flex;justify-content:space-between;align-items:center;}
+.grades-header h3{font-family:'Playfair Display',serif;color:var(--gold);font-size:1.05rem;}
+.grades-header span{color:rgba(255,255,255,.45);font-size:.82rem;}
+.grades-body{padding:28px;}
+.grade-row{display:grid;grid-template-columns:1fr 130px 60px 55px;gap:18px;align-items:center;padding:14px 0;border-bottom:1px solid var(--cream-dark);}
+.grade-row:last-child{border-bottom:none;}
+.grade-row.hdr{padding-bottom:10px;border-bottom:2px solid var(--navy-deep);}
+.g-lbl{font-size:.75rem;letter-spacing:1px;text-transform:uppercase;color:var(--slate);}
+.grade-category{font-family:'Playfair Display',serif;font-size:.98rem;color:var(--navy-deep);}
+.grade-bar{height:8px;background:var(--cream-dark);border-radius:4px;overflow:hidden;margin-bottom:3px;}
+.grade-bar-fill{height:100%;border-radius:4px;transition:width 1s ease;}
+.grade-bar-fill.excellent{background:linear-gradient(90deg,var(--green),var(--green-light));}
+.grade-bar-fill.good{background:linear-gradient(90deg,var(--navy),#4a6fa5);}
+.grade-bar-fill.average{background:linear-gradient(90deg,#8b6914,var(--gold));}
+.grade-bar-fill.low{background:linear-gradient(90deg,var(--crimson),#e05c70);}
+.grade-score{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;text-align:center;}
+.s-ex{color:var(--green);}
+.s-go{color:var(--navy);}
+.s-av{color:#8b6914;}
+.s-lo{color:var(--crimson);}
+
+.final-grade-box{background:var(--navy-deep);border-radius:10px;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;margin-top:18px;}
+.final-grade-box .fl{color:rgba(255,255,255,.55);font-size:.85rem;letter-spacing:2px;text-transform:uppercase;}
+.final-grade-box .fs{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:900;color:var(--gold);}
+.final-grade-box .fst{padding:5px 14px;background:rgba(45,106,79,.3);border:1px solid var(--green-light);border-radius:20px;color:var(--green-light);font-size:.83rem;}
+.final-grade-box .fst.rep{background:rgba(155,28,46,.3);border-color:#e05c70;color:#ff9aaa;}
+
+.comments-section{background:white;border-radius:12px;padding:24px 28px;box-shadow:0 2px 14px rgba(0,0,0,.06);margin-top:18px;}
+.comments-section h4{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--navy-deep);margin-bottom:13px;display:flex;gap:8px;align-items:center;}
+.comment-box{background:var(--cream);border-radius:8px;padding:16px;font-style:italic;color:var(--slate);font-size:.93rem;border-left:3px solid var(--gold);line-height:1.7;min-height:70px;}
+.comment-author{text-align:right;font-size:.77rem;color:var(--slate);margin-top:8px;letter-spacing:1px;}
+
+/* ─── DATOS ALUMNO ─── */
+.student-profile{display:grid;grid-template-columns:auto 1fr;gap:30px;background:white;border-radius:12px;padding:30px;box-shadow:0 2px 18px rgba(0,0,0,.07);margin-bottom:22px;align-items:start;}
+.student-avatar{width:100px;height:100px;background:linear-gradient(135deg,var(--navy),var(--navy-deep));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.8rem;border:4px solid var(--gold);}
+.student-profile-info h2{font-family:'Playfair Display',serif;font-size:1.7rem;color:var(--navy-deep);margin-bottom:5px;}
+.student-badge{display:inline-block;padding:3px 13px;background:rgba(26,39,68,.08);border:1px solid rgba(26,39,68,.18);border-radius:20px;font-size:.78rem;letter-spacing:2px;text-transform:uppercase;color:var(--navy);margin-bottom:18px;}
+.profile-fields{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+.profile-field{background:var(--cream);border-radius:8px;padding:13px 16px;}
+.profile-field label{display:block;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--slate);margin-bottom:4px;}
+.profile-field .val{font-size:.98rem;color:var(--navy-deep);font-weight:600;}
+
+/* ─── CAMBRIDGE ─── */
+.cambridge-intro{background:linear-gradient(135deg,var(--navy-deep),var(--navy));border-radius:12px;padding:30px;color:white;margin-bottom:26px;position:relative;overflow:hidden;}
+.cambridge-intro::before{content:'CAMBRIDGE';position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-family:'Playfair Display',serif;font-size:4.5rem;font-weight:900;color:rgba(255,255,255,.03);white-space:nowrap;pointer-events:none;}
+.cambridge-intro h2{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold);margin-bottom:8px;}
+.cambridge-intro p{color:rgba(255,255,255,.6);line-height:1.7;max-width:600px;font-size:.95rem;}
+.cambridge-levels{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px;}
+.level-card{background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 14px rgba(0,0,0,.07);transition:transform .3s,box-shadow .3s;cursor:pointer;}
+.level-card:hover{transform:translateY(-4px);box-shadow:0 8px 28px rgba(0,0,0,.13);}
+.level-header{padding:20px 22px;display:flex;align-items:center;gap:13px;}
+.level-badge{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1rem;font-weight:900;color:white;flex-shrink:0;}
+.lb-a1{background:linear-gradient(135deg,#6c757d,#adb5bd);}
+.lb-a2{background:linear-gradient(135deg,#0077b6,#00b4d8);}
+.lb-b1{background:linear-gradient(135deg,#2d6a4f,#52b788);}
+.lb-b2{background:linear-gradient(135deg,#1a2744,#3a5898);}
+.lb-c1{background:linear-gradient(135deg,#8b1c2e,#c0392b);}
+.lb-c2{background:linear-gradient(135deg,#4a0e8f,#7b2fff);}
+.level-info h3{font-family:'Playfair Display',serif;font-size:.97rem;color:var(--navy-deep);}
+.level-info span{font-size:.78rem;color:var(--slate);}
+.level-body{padding:0 22px 20px;}
+.level-desc{font-size:.88rem;color:var(--slate);line-height:1.6;margin-bottom:12px;}
+.level-skills{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px;}
+.skill-tag{padding:3px 9px;background:var(--cream);border-radius:20px;font-size:.72rem;color:var(--navy);border:1px solid var(--cream-dark);}
+.level-duration{font-size:.8rem;color:var(--slate);display:flex;align-items:center;gap:5px;}
+.level-detail{display:none;padding:0 22px 20px;border-top:1px solid var(--cream-dark);}
+.level-detail.open{display:block;animation:fadeIn .3s ease;}
+.level-detail ul{list-style:none;}
+.level-detail ul li{padding:4px 0;font-size:.86rem;color:var(--slate);display:flex;gap:7px;}
+.level-detail ul li::before{content:'→';color:var(--gold);}
+
+/* ─── CONDUCTA ─── */
+.conduct-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
+.conduct-stat{background:white;border-radius:10px;padding:18px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.06);}
+.conduct-stat .number{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;}
+.conduct-stat .stat-label{font-size:.72rem;color:var(--slate);letter-spacing:1px;text-transform:uppercase;margin-top:4px;}
+.conduct-stat.g .number{color:var(--green);}
+.conduct-stat.w .number{color:#e6a817;}
+.conduct-stat.b .number{color:var(--crimson);}
+.conduct-stat.n .number{color:var(--navy);}
+.conduct-record{background:white;border-radius:12px;box-shadow:0 2px 14px rgba(0,0,0,.06);overflow:hidden;}
+.conduct-record-header{background:var(--navy-deep);padding:16px 24px;display:flex;justify-content:space-between;align-items:center;}
+.conduct-record-header h3{font-family:'Playfair Display',serif;color:var(--gold);}
+.conduct-record-header span{color:rgba(255,255,255,.4);font-size:.8rem;}
+.conduct-table{width:100%;border-collapse:collapse;}
+.conduct-table th{background:var(--cream);padding:11px 18px;text-align:left;font-size:.72rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--slate);font-weight:400;border-bottom:1px solid var(--cream-dark);}
+.conduct-table td{padding:13px 18px;border-bottom:1px solid var(--cream-dark);font-size:.9rem;}
+.conduct-table tr:last-child td{border-bottom:none;}
+.conduct-table tr:hover td{background:rgba(248,244,237,.7);}
+.badge-conduct{padding:3px 11px;border-radius:20px;font-size:.75rem;font-weight:600;}
+.badge-conduct.positivo{background:rgba(45,106,79,.12);color:var(--green);}
+.badge-conduct.advertencia{background:rgba(230,168,23,.12);color:#8b6914;}
+.badge-conduct.negativo{background:rgba(155,28,46,.12);color:var(--crimson);}
+
+/* ─── CONTACTO ─── */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:26px;}
+.contact-card{background:white;border-radius:12px;padding:28px;box-shadow:0 2px 14px rgba(0,0,0,.07);transition:transform .3s;}
+.contact-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.12);}
+.contact-icon{width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:16px;}
+.ci-email{background:linear-gradient(135deg,#1a2744,#3a5898);}
+.ci-phone{background:linear-gradient(135deg,#2d6a4f,#52b788);}
+.ci-wa1{background:linear-gradient(135deg,#128c7e,#25d366);}
+.ci-wa2{background:linear-gradient(135deg,#075e54,#128c7e);}
+.contact-card h3{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--navy-deep);margin-bottom:6px;}
+.contact-card .cv{font-size:1.05rem;color:var(--slate);}
+.contact-card .cs{font-size:.8rem;color:rgba(100,100,100,.6);margin-top:4px;}
+.contact-cta{display:inline-flex;align-items:center;gap:5px;margin-top:13px;padding:7px 16px;border-radius:5px;font-size:.83rem;font-weight:600;text-decoration:none;transition:all .2s;cursor:pointer;border:none;font-family:'Crimson Pro',serif;}
+.contact-cta.green{background:#25d366;color:white;}
+.contact-cta.green:hover{background:#128c7e;}
+.contact-cta.blue{background:var(--navy);color:white;}
+.contact-cta.blue:hover{background:var(--navy-deep);}
+.map-box{background:white;border-radius:12px;padding:28px;box-shadow:0 2px 14px rgba(0,0,0,.07);text-align:center;}
+.map-box h3{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--navy-deep);margin-bottom:5px;}
+.map-box p{color:var(--slate);font-size:.93rem;}
+
+/* ─── DIDACTIC ELEMENTS ─── */
+.tip-carousel{background:linear-gradient(135deg,var(--navy-deep),#1a3a6b);border-radius:12px;padding:24px 28px;margin-bottom:26px;position:relative;overflow:hidden;cursor:pointer;}
+.tip-carousel::after{content:'💡';position:absolute;right:24px;top:50%;transform:translateY(-50%);font-size:2.5rem;opacity:.15;}
+.tip-tag{font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.tip-text{font-family:'Playfair Display',serif;font-size:1.15rem;color:white;line-height:1.6;max-width:90%;}
+.tip-source{font-size:.8rem;color:rgba(255,255,255,.4);margin-top:8px;}
+.tip-dots{display:flex;gap:5px;margin-top:14px;}
+.tip-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.2);transition:background .3s;}
+.tip-dot.active{background:var(--gold);}
+
+.vocabulary-widget{background:white;border-radius:12px;padding:24px;box-shadow:0 2px 14px rgba(0,0,0,.07);margin-bottom:26px;}
+.vocab-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
+.vocab-header h3{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--navy-deep);}
+.btn-vocab-new{padding:7px 16px;background:var(--gold);color:var(--navy-deep);border:none;border-radius:5px;font-family:'Crimson Pro',serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .3s;}
+.btn-vocab-new:hover{background:var(--gold-light);}
+.vocab-card-wrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;}
+.vocab-card{border-radius:10px;padding:18px;border:2px solid var(--cream-dark);text-align:center;transition:all .3s;position:relative;}
+.vocab-card:hover{border-color:var(--gold);transform:translateY(-2px);}
+.vocab-english{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--navy-deep);}
+.vocab-spanish{font-size:.88rem;color:var(--slate);margin-top:3px;}
+.vocab-type{font-size:.7rem;background:var(--cream);padding:2px 8px;border-radius:10px;color:var(--slate);display:inline-block;margin-top:5px;}
+.vocab-reveal{position:absolute;inset:0;background:var(--navy);border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-family:'Playfair Display',serif;font-size:1.1rem;cursor:pointer;opacity:0;transition:opacity .3s;}
+.vocab-card:hover .vocab-reveal{opacity:1;}
+
+.progress-ring-wrap{display:flex;align-items:center;justify-content:center;flex-direction:column;margin-bottom:20px;}
+.progress-ring-wrap svg{transform:rotate(-90deg);}
+.ring-label{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--navy-deep);}
+.ring-sub{font-size:.78rem;color:var(--slate);}
+
+.nivel-roadmap{background:white;border-radius:12px;padding:28px;box-shadow:0 2px 14px rgba(0,0,0,.07);margin-bottom:26px;}
+.nivel-roadmap h3{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--navy-deep);margin-bottom:20px;}
+.roadmap-steps{display:flex;align-items:center;gap:0;overflow-x:auto;padding-bottom:8px;}
+.roadmap-step{display:flex;flex-direction:column;align-items:center;position:relative;min-width:90px;}
+.roadmap-step:not(:last-child)::after{content:'';position:absolute;top:20px;right:-35px;width:70px;height:2px;background:var(--cream-dark);z-index:0;}
+.roadmap-step.done:not(:last-child)::after{background:var(--green-light);}
+.roadmap-step.current:not(:last-child)::after{background:linear-gradient(90deg,var(--gold),var(--cream-dark));}
+.rs-circle{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;margin-bottom:8px;z-index:1;position:relative;font-family:'Playfair Display',serif;border:2px solid transparent;}
+.rs-circle.done{background:var(--green);color:white;}
+.rs-circle.current{background:var(--gold);color:var(--navy-deep);border-color:var(--gold-light);box-shadow:0 0 0 4px rgba(200,168,75,.25);}
+.rs-circle.future{background:var(--cream);color:var(--slate);border:2px solid var(--cream-dark);}
+.rs-label{font-size:.7rem;color:var(--slate);text-align:center;max-width:80px;}
+.rs-label.cur{color:var(--gold);font-weight:600;}
+
+.daily-challenge{background:linear-gradient(135deg,#1e3a6b,#2a5298);border-radius:12px;padding:24px;margin-bottom:26px;color:white;}
+.dc-tag{font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);margin-bottom:8px;}
+.dc-question{font-family:'Playfair Display',serif;font-size:1.15rem;margin-bottom:18px;line-height:1.5;}
+.dc-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.dc-opt{padding:11px 16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:white;font-family:'Crimson Pro',serif;font-size:.95rem;cursor:pointer;transition:all .25s;text-align:left;}
+.dc-opt:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3);}
+.dc-opt.correct{background:rgba(45,106,79,.4);border-color:var(--green-light);}
+.dc-opt.wrong{background:rgba(155,28,46,.4);border-color:#e05c70;}
+.dc-result{margin-top:14px;padding:12px;background:rgba(255,255,255,.08);border-radius:8px;font-size:.9rem;display:none;}
+
+.stats-banner{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:26px;}
+.stat-banner-card{background:white;border-radius:10px;padding:18px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.06);border-bottom:3px solid var(--navy);}
+.stat-banner-card.gc{border-bottom-color:var(--gold);}
+.stat-banner-card.gr{border-bottom-color:var(--green);}
+.sbc-num{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--navy-deep);}
+.sbc-lbl{font-size:.72rem;color:var(--slate);letter-spacing:1px;text-transform:uppercase;margin-top:3px;}
+
+/* ─── ADMIN ─── */
+#admin-dashboard{display:none;min-height:100vh;background:var(--cream);}
+.admin-wrap{padding:28px;}
+.admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
+.admin-stat-card{background:white;border-radius:10px;padding:20px;box-shadow:0 2px 10px rgba(0,0,0,.07);border-top:3px solid var(--navy);text-align:center;}
+.admin-stat-card.go{border-top-color:var(--gold);}
+.admin-stat-card.gr{border-top-color:var(--green);}
+.admin-stat-card.re{border-top-color:var(--crimson);}
+.admin-stat-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--navy-deep);}
+.admin-stat-label{font-size:.75rem;color:var(--slate);letter-spacing:1px;text-transform:uppercase;margin-top:4px;}
+
+.admin-layout{display:grid;grid-template-columns:260px 1fr;gap:26px;min-height:calc(100vh - 220px);}
+.admin-sidebar{background:var(--navy-deep);border-radius:12px;padding:22px 0;height:fit-content;}
+.admin-sidebar-title{font-family:'Playfair Display',serif;color:var(--gold);font-size:.8rem;letter-spacing:2px;text-transform:uppercase;padding:0 22px 16px;border-bottom:1px solid rgba(200,168,75,.2);margin-bottom:12px;}
+.admin-nav-btn{width:100%;padding:12px 22px;background:transparent;border:none;color:rgba(255,255,255,.5);font-family:'Crimson Pro',serif;font-size:.93rem;cursor:pointer;text-align:left;transition:all .2s;display:flex;align-items:center;gap:9px;border-left:3px solid transparent;}
+.admin-nav-btn:hover{background:rgba(255,255,255,.05);color:white;}
+.admin-nav-btn.active{background:rgba(200,168,75,.1);color:var(--gold);border-left-color:var(--gold);}
+.admin-nav-btn:disabled{opacity:.3;cursor:not-allowed;}
+
+.admin-panel{display:none;}
+.admin-panel.active{display:block;animation:fadeUp .3s ease;}
+
+.admin-search-bar{display:flex;gap:10px;margin-bottom:22px;flex-wrap:wrap;}
+.admin-search-bar input,.admin-search-bar select{padding:11px 16px;border:2px solid var(--cream-dark);border-radius:7px;font-family:'Crimson Pro',serif;font-size:.93rem;outline:none;transition:border-color .3s;background:white;}
+.admin-search-bar input{flex:1;min-width:200px;}
+.admin-search-bar input:focus,.admin-search-bar select:focus{border-color:var(--navy);}
+
+.students-table{background:white;border-radius:12px;box-shadow:0 2px 14px rgba(0,0,0,.07);overflow:hidden;}
+.students-table table{width:100%;border-collapse:collapse;}
+.students-table th{background:var(--navy-deep);color:rgba(255,255,255,.55);padding:13px 17px;text-align:left;font-size:.72rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:400;}
+.students-table td{padding:13px 17px;border-bottom:1px solid var(--cream-dark);font-size:.9rem;}
+.students-table tr:last-child td{border-bottom:none;}
+.students-table tr:hover td{background:rgba(248,244,237,.8);}
+.student-id-badge{background:var(--navy-deep);color:var(--gold);padding:2px 9px;border-radius:4px;font-family:monospace;font-size:.87rem;letter-spacing:1px;}
+
+.pagination{display:flex;align-items:center;justify-content:center;gap:7px;padding:18px;border-top:1px solid var(--cream-dark);}
+.page-btn{width:34px;height:34px;background:transparent;border:1px solid var(--cream-dark);border-radius:6px;cursor:pointer;font-family:'Crimson Pro',serif;font-size:.88rem;transition:all .2s;color:var(--navy-deep);}
+.page-btn:hover,.page-btn.active{background:var(--navy);color:white;border-color:var(--navy);}
+.page-info{font-size:.82rem;color:var(--slate);margin:0 8px;}
+
+/* Buttons */
+.btn-primary{padding:11px 22px;background:var(--navy);color:white;border:none;border-radius:7px;font-family:'Crimson Pro',serif;font-size:.92rem;cursor:pointer;transition:all .3s;letter-spacing:.5px;}
+.btn-primary:hover{background:var(--navy-deep);transform:translateY(-1px);}
+.btn-gold{padding:11px 22px;background:var(--gold);color:var(--navy-deep);border:none;border-radius:7px;font-family:'Crimson Pro',serif;font-size:.92rem;font-weight:600;cursor:pointer;transition:all .3s;}
+.btn-gold:hover{background:var(--gold-light);transform:translateY(-1px);}
+.btn-edit{padding:7px 14px;background:transparent;color:var(--navy);border:1px solid var(--navy);border-radius:5px;font-family:'Crimson Pro',serif;font-size:.82rem;cursor:pointer;transition:all .2s;}
+.btn-edit:hover{background:var(--navy);color:white;}
+.btn-danger{padding:7px 14px;background:transparent;color:var(--crimson);border:1px solid var(--crimson);border-radius:5px;font-family:'Crimson Pro',serif;font-size:.82rem;cursor:pointer;transition:all .2s;}
+.btn-danger:hover{background:var(--crimson);color:white;}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.modal-overlay.open{display:flex;animation:fadeIn .3s ease;}
+.modal{background:white;border-radius:14px;padding:32px;width:90%;max-width:680px;max-height:90vh;overflow-y:auto;animation:fadeUp .3s ease;position:relative;}
+.modal-title{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--navy-deep);margin-bottom:22px;padding-bottom:14px;border-bottom:2px solid var(--cream-dark);display:flex;justify-content:space-between;align-items:center;}
+.modal-close{background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--slate);transition:color .2s;}
+.modal-close:hover{color:var(--crimson);}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;}
+.modal-field label{display:block;font-size:.72rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--slate);margin-bottom:6px;}
+.modal-field input,.modal-field select,.modal-field textarea{width:100%;padding:10px 13px;border:2px solid var(--cream-dark);border-radius:7px;font-family:'Crimson Pro',serif;font-size:.93rem;outline:none;transition:border-color .3s;background:white;}
+.modal-field input:focus,.modal-field select:focus,.modal-field textarea:focus{border-color:var(--navy);}
+.modal-field textarea{resize:vertical;min-height:75px;}
+.modal-field.full{grid-column:1/-1;}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:8px;}
+
+/* readonly overlay */
+.readonly-notice{background:linear-gradient(135deg,rgba(200,168,75,.1),rgba(200,168,75,.05));border:1px solid rgba(200,168,75,.3);border-radius:10px;padding:18px 22px;margin-bottom:22px;display:flex;align-items:center;gap:12px;}
+.readonly-notice .icon{font-size:1.5rem;}
+.readonly-notice p{font-size:.93rem;color:var(--navy-deep);}
+.readonly-notice strong{font-family:'Playfair Display',serif;}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;right:28px;background:var(--navy-deep);color:white;padding:13px 20px;border-radius:8px;border-left:4px solid var(--gold);font-family:'Crimson Pro',serif;font-size:.93rem;z-index:2000;transform:translateY(100px);transition:transform .4s ease;box-shadow:0 8px 28px rgba(0,0,0,.3);}
+.toast.show{transform:translateY(0);}
+.toast.success{border-left-color:var(--green-light);}
+.toast.error{border-left-color:var(--crimson);}
+
+/* Cambridge View-only for coordinator */
+.cambridge-overview{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
+.camb-ov-card{background:white;border-radius:10px;padding:20px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.07);}
+.camb-ov-card .lvl{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:var(--navy-deep);}
+.camb-ov-card .lname{font-size:.88rem;color:var(--slate);margin-top:3px;}
+.camb-ov-card .count{font-size:.75rem;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-top:8px;}
+
+@media(max-width:768px){
+  .dashboard-header{padding:0 16px;}
+  .tabs-nav{padding:0 16px;}
+  .tab-content{padding:16px;}
+  .blocks-grid{grid-template-columns:repeat(2,1fr);}
+  .payment-info-grid{grid-template-columns:1fr;}
+  .contact-grid{grid-template-columns:1fr;}
+  .conduct-summary{grid-template-columns:repeat(2,1fr);}
+  .profile-fields{grid-template-columns:1fr;}
+  .admin-layout{grid-template-columns:1fr;}
+  .admin-stats{grid-template-columns:repeat(2,1fr);}
+  .modal-grid{grid-template-columns:1fr;}
+  .cambridge-levels{grid-template-columns:1fr;}
+  .student-profile{grid-template-columns:1fr;}
+  .stats-banner{grid-template-columns:1fr;}
+  .dc-options{grid-template-columns:1fr;}
+  .roadmap-steps{gap:0;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN ═══ -->
+<div id="login-page">
+  <div class="union-jack-accent"></div>
+  <div class="login-corner tl"></div><div class="login-corner tr"></div>
+  <div class="login-corner bl"></div><div class="login-corner br"></div>
+  <div class="floating-letters">
+    <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span>
+    <span>F</span><span>G</span><span>H</span><span>I</span><span>J</span>
+  </div>
+
+  <div class="login-container">
+    <div class="school-crest">🎓</div>
+    <div class="school-title">Británico</div>
+    <div class="school-subtitle">Villa del Carbón · Centro de Inglés</div>
+    <div class="divider-ornament"><span></span><em>◆</em><span></span></div>
+
+    <div class="login-tabs">
+      <button class="login-tab active" onclick="switchLoginTab('alumno')">👨‍🎓 Alumno</button>
+      <button class="login-tab" onclick="switchLoginTab('admin')">🛡️ Administrador</button>
+    </div>
+    <div class="login-form-box">
+      <div id="form-alumno" class="login-form active">
+        <div class="form-group"><label>Matrícula</label>
+          <input type="text" id="matricula-input" placeholder="Ej: A0001" maxlength="5" style="text-transform:uppercase">
+        </div>
+        <div class="form-group"><label>Contraseña</label>
+          <input type="password" id="pass-alumno" placeholder="••••••">
+        </div>
+        <button class="btn-login" onclick="loginAlumno()">Ingresar al Portal</button>
+        <div class="login-error" id="error-alumno">❌ Matrícula o contraseña incorrecta.</div>
+      </div>
+      <div id="form-admin" class="login-form">
+        <div class="form-group"><label>Perfil</label>
+          <select id="admin-select">
+            <option value="">— Seleccionar perfil —</option>
+            <option value="DIR">🏛️ Director General</option>
+            <option value="COO">📋 Coordinación Académica</option>
+            <option value="MAE">🍎 Maestro</option>
+            <option value="CAM">🏅 Cambridge Coordinator</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Contraseña</label>
+          <input type="password" id="pass-admin" placeholder="••••••">
+        </div>
+        <button class="btn-login" onclick="loginAdmin()">Acceder al Panel</button>
+        <div class="login-error" id="error-admin">❌ Credenciales incorrectas.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STUDENT DASHBOARD ═══ -->
+<div id="student-dashboard" style="display:none;">
+  <header class="dashboard-header">
+    <div class="header-logo">
+      <div class="header-logo-icon">🎓</div>
+      <div class="header-logo-text">Británico<span>Villa del Carbón</span></div>
+    </div>
+    <div class="header-right">
+      <div style="text-align:right;">
+        <div class="header-user-name" id="student-name-header">—</div>
+        <div class="header-user-id" id="student-id-header">—</div>
+      </div>
+      <button class="btn-logout" onclick="logout()">Salir ↩</button>
+    </div>
+  </header>
+
+  <nav class="tabs-nav">
+    <button class="tab-btn active" onclick="showTab('cuenta')"><span>💳</span> Estado de Cuenta</button>
+    <button class="tab-btn" onclick="showTab('calificaciones')"><span>📊</span> Calificaciones</button>
+    <button class="tab-btn" onclick="showTab('datos')"><span>👤</span> Datos del Alumno</button>
+    <button class="tab-btn" onclick="showTab('cambridge')"><span>🏅</span> Exámenes Cambridge</button>
+    <button class="tab-btn" onclick="showTab('conducta')"><span>⭐</span> Conducta</button>
+    <button class="tab-btn" onclick="showTab('contacto')"><span>📞</span> Contacto</button>
+  </nav>
+
+  <!-- CUENTA -->
+  <div id="tab-cuenta" class="tab-content active">
+    <div class="page-title">Estado de Cuenta</div>
+    <div class="page-subtitle">Consulta el estado de tus pagos y datos bancarios para depósitos o transferencias</div>
+    <div class="ornament-line"><div class="ln"></div><div class="dm">◆</div><div class="ln2"></div></div>
+    <div class="account-summary" id="account-summary"></div>
+    <div style="background:white;border-radius:12px;padding:28px;box-shadow:0 2px 18px rgba(0,0,0,.07);margin-bottom:24px;">
+      <div class="blocks-title"> Bloques de Pago — $500 c/u</div>
+      <div class="blocks-grid" id="blocks-grid"></div>
+    </div>
+    <div class="payment-info-grid">
+      <div class="payment-info-box">
+        <div class="payment-info-title">🏦 BBVA Bancomer</div>
+        <div class="info-row"><span class="info-label">Titular</span><span class="info-value">ELPIDIO SANCHEZ ROCHA</span></div>
+        <div class="info-row"><span class="info-label">No. de cuenta</span><span class="info-value mono">0123 4567 8910</span></div>
+        <div class="info-row"><span class="info-label">CLABE</span><span class="info-value mono">012 345 00123456789 1</span></div>
+        <div class="info-row"><span class="info-label">Referencia</span><span class="info-value" id="pay-ref">—</span></div>
+        <div class="transfer-reqs">
+          <h4>Requisitos para depósito / transferencia</h4>
+          <ul>
+            <li>Usar tu matrícula como referencia de pago</li>
+            <li>Incluir en concepto: nombre completo y matrícula</li>
+            <li>Conservar el comprobante de pago original</li>
+            <li>Enviar foto del comprobante al WhatsApp de la Maestra</li>
+            <li>Revisar si el pago se reflejo en tu portal</li>
+          </ul>
+        </div>
+      </div>
+      <div class="payment-info-box bank2">
+        <div class="payment-info-title">🏦 Revolut</div>
+        <div class="info-row"><span class="info-label">Titular</span><span class="info-value">ELPIDIO SANCHEZ ROCHA</span></div>
+        <div class="info-row"><span class="info-label">No. de cuenta</span><span class="info-value mono">6523 9100 7812</span></div>
+        <div class="info-row"><span class="info-label">CLABE</span><span class="info-value mono">014 678 06523910078 1</span></div>
+        <div class="info-row"><span class="info-label">Referencia</span><span class="info-value" id="pay-ref2">—</span></div>
+        <div class="transfer-reqs">
+          <h4>Requisitos para depósito / transferencia</h4>
+          <ul>
+            <li>Usar tu matrícula como referencia de pago</li>
+            <li>Incluir en concepto: nombre completo y matrícula</li>
+            <li>Conservar el comprobante de pago original</li>
+            <li>Enviar foto del comprobante al WhatsApp escolar</li>
+            <li>Revisar si el pago se reflejó en tu portal</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CALIFICACIONES -->
+  <div id="tab-calificaciones" class="tab-content">
+    <div class="page-title">Calificaciones</div>
+    <div class="page-subtitle">Tus evaluaciones del ciclo escolar 2026–2027</div>
+    <div class="ornament-line"><div class="ln"></div><div class="dm">◆</div><div class="ln2"></div></div>
+    <div class="stats-banner" id="grades-stats-banner"></div>
+    <div class="eval-selector">
+      <button class="eval-btn active" onclick="showEval(1,this)">1ª Evaluación</button>
+      <button class="eval-btn" onclick="showEval(2,this)">2ª Evaluación</button>
+      <button class="eval-btn" onclick="showEval(3,this)">3ª Evaluación</button>
+    </div>
+    <div id="eval-content"></div>
+  </div>
+
+  <!-- DATOS -->
+  <div id="tab-datos" class="tab-content">
+    <div class="page-title">Datos del Alumno</div>
+    <div class="page-subtitle">Información personal registrada en el sistema escolar</div>
+    <div class="ornament-line"><div class="ln"></div><div class="dm">◆</div><div class="ln2"></div></div>
+    <div class="student-profile">
+      <div class="student-avatar">👤</div>
+      <div class="student-profile-info">
+        <h2 id="profile-name">—</h2>
+        <div class="student-badge" id="profile-nivel">—</div>
+        <div class="profile-fields" id="profile-fields"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAMBRIDGE -->
+  <div id="tab-cambridge" class="tab-content">
+    <div class="page-title">Exámenes Cambridge</div>
+    <div class="page-subtitle">Certifícate internacionalmente con las acreditaciones más reconocidas del mundo</div>
+    <div class="ornament-line"><div class="ln"></div><div class="dm">◆</div><div class="ln2"></div></div>
+    <div class="tip-carousel" onclick="nextTip()" id="tip-carousel">
+      <div class="tip-tag">💡 Consejo del día</div>
+      <div class="tip-text" id="tip-text">—</div>
+      <div class="tip-source" id="tip-source">—</div>
+      <div class="tip-dots" id="tip-dots"></div>
+    </div>
+    <div class="cambridge-intro">
+      <h2>🏅 Certificaciones Cambridge English</h2>
+      <p>Los exámenes Cambridge son reconocidos por más de 25,000 instituciones en 130 países. Obtener una certificación abre puertas académicas y profesionales a nivel global. Haz clic en cada nivel para ver más información.</p>
+    </div>
+    <div class="cambridge-levels" id="cambridge-levels"></div>
+  </div>
+
+  <!-- CONDUCTA -->
+  <div id="tab-conducta" class="tab-content">
+    <div class="page-title">Registro de Conducta</div>
+    <div class="page-subtitle">Seguimiento de tu comportamiento durante el ciclo escolar 2026–2027</div>
+    <div class="ornament-line"><div class="ln"></div><div class="dm">◆</div><div class="ln2"></div></div>
+    <div class="conduct-summary" id="conduct-summary"></div>
+    <div class="conduct-record" id="conduct-record"></div>
+  </div>
+
+  <!-- CONTACTO -->
+  <div id="tab-contacto" class="tab-content">
+    <div class="page-title">Contacto</div>
+    <div class="page-subtitle">Canales oficiales de comunicación de Británico Villa del Carbón</div>
+    <div class="ornament-line"><div class="ln"></div><div class="dm">◆</div><div class="ln2"></div></div>
+    <div class="daily-challenge" id="daily-challenge"></div>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <div class="contact-icon ci-email">📧</div>
+        <h3>Correo Electrónico</h3>
+        <div class="cv">evelynsd24@hotmail.com</div>
+        <div class="cs">Respuesta en 24–48 horas hábiles</div>
+        <a href="mailto:britanico.villacarbon@gmail.com" class="contact-cta blue">✉️ Enviar correo</a>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon ci-phone">📞</div>
+        <h3>Teléfono de la Escuela</h3>
+        <div class="cv">(588) 9130027</div>
+        <div class="cs">Lun–Vie 11:00–19:00 </div>
+        <a href="tel:5889130027" class="contact-cta blue">📞 Llamar</a>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon ci-wa1">💬</div>
+        <h3>WhatsApp — Evelyn</h3>
+        <div class="cv">(5514800440)</div>
+        <div class="cs">Dudas académicas, pagos y asuntos escolares</div>
+        <a href="https://wa.me/527123456789" target="_blank" class="contact-cta green">💬 Abrir WhatsApp</a>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon ci-wa2">💬</div>
+        <h3>WhatsApp — Elpidio</h3>
+        <div class="cv">(5523432583)</div>
+        <div class="cs">Inscripciones, horarios e información general</div>
+        <a href="https://wa.me/527129876543" target="_blank" class="contact-cta green">💬 Abrir WhatsApp</a>
+      </div>
+    </div>
+    <div class="map-box">
+      <div style="font-size:2.5rem;margin-bottom:8px;">📍</div>
+      <h3>Ubicación</h3>
+      <p>Calle 1 de Mayo, 4B Villa del Carbón, Estado de México, C.P. 54000</p><br>
+      <a href="https://maps.google.com" target="_blank" class="contact-cta blue">🗺️ Ver en Google Maps</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ADMIN DASHBOARD ═══ -->
+<div id="admin-dashboard">
+  <header class="dashboard-header">
+    <div class="header-logo">
+      <div class="header-logo-icon">🛡️</div>
+      <div class="header-logo-text">Panel Administrativo<span>Británico Villa del Carbón</span></div>
+    </div>
+    <div class="header-right">
+      <div style="text-align:right;">
+        <div class="header-user-name" id="admin-name-header">—</div>
+        <div class="perm-badge" id="admin-perm-badge">—</div>
+      </div>
+      <button class="btn-logout" onclick="logout()">Salir ↩</button>
+    </div>
+  </header>
+
+  <div class="admin-wrap">
+    <div class="admin-stats">
+      <div class="admin-stat-card"><div class="admin-stat-num">1,000</div><div class="admin-stat-label">Alumnos Registrados</div></div>
+      <div class="admin-stat-card go"><div class="admin-stat-num" id="stat-pagados">—</div><div class="admin-stat-label">Bloques Pagados</div></div>
+      <div class="admin-stat-card gr"><div class="admin-stat-num" id="stat-ingresos">—</div><div class="admin-stat-label">Ingresos Totales</div></div>
+      <div class="admin-stat-card re"><div class="admin-stat-num" id="stat-pendientes">—</div><div class="admin-stat-label">Pagos Pendientes</div></div>
+    </div>
+
+    <div class="admin-layout">
+      <div class="admin-sidebar">
+        <div class="admin-sidebar-title">Gestión Escolar</div>
+        <button class="admin-nav-btn active" id="nav-students" onclick="showAdminPanel('students')">👨‍🎓 Alumnos</button>
+        <button class="admin-nav-btn" id="nav-grades" onclick="showAdminPanel('grades')">📊 Calificaciones</button>
+        <button class="admin-nav-btn" id="nav-payments" onclick="showAdminPanel('payments')">💳 Pagos</button>
+        <button class="admin-nav-btn" id="nav-conducta-admin" onclick="showAdminPanel('conducta-admin')">⭐ Conducta</button>
+        <button class="admin-nav-btn" id="nav-comments-admin" onclick="showAdminPanel('comments-admin')">💬 Comentarios</button>
+        <button class="admin-nav-btn" id="nav-cambridge-admin" onclick="showAdminPanel('cambridge-admin')">🏅 Cambridge Vista</button>
+      </div>
+
+      <div>
+        <!-- Panel: Alumnos -->
+        <div id="panel-students" class="admin-panel active">
+          <div class="page-title" style="margin-bottom:18px;">👨‍🎓 Gestión de Alumnos</div>
+          <div id="students-readonly-notice" class="readonly-notice" style="display:none;">
+            <div class="icon">👁️</div>
+            <p><strong>Vista de solo lectura.</strong> Tu perfil no tiene permisos para modificar datos de alumnos.</p>
+          </div>
+          <div class="admin-search-bar">
+            <input type="text" id="search-students" placeholder="Buscar por nombre o matrícula..." oninput="renderStudentsTable()">
+            <select id="filter-nivel" onchange="renderStudentsTable()">
+              <option value="">Todos los niveles</option>
+              <option>A1 — Beginner</option><option>A2 — Elementary</option>
+              <option>B1 — Pre-Intermediate</option><option>B2 — Upper-Intermediate</option>
+              <option>C1 — Advanced</option><option>C2 — Proficiency</option>
+            </select>
+            <button class="btn-gold" id="btn-new-student" onclick="openNewStudentModal()">+ Nuevo Alumno</button>
+          </div>
+          <div class="students-table" id="students-table-container"></div>
+        </div>
+
+        <!-- Panel: Calificaciones -->
+        <div id="panel-grades" class="admin-panel">
+          <div class="page-title" style="margin-bottom:18px;">📊 Calificaciones</div>
+          <div class="admin-search-bar">
+            <input type="text" id="search-grades" placeholder="Buscar alumno..." oninput="renderGradesAdmin()">
+            <select id="eval-filter" onchange="renderGradesAdmin()">
+              <option value="1">1ª Evaluación</option><option value="2">2ª Evaluación</option><option value="3">3ª Evaluación</option>
+            </select>
+          </div>
+          <div id="grades-admin-table" class="students-table"></div>
+        </div>
+
+        <!-- Panel: Pagos -->
+        <div id="panel-payments" class="admin-panel">
+          <div class="page-title" style="margin-bottom:18px;">💳 Estado de Pagos</div>
+          <div id="payments-readonly-notice" class="readonly-notice" style="display:none;">
+            <div class="icon">👁️</div>
+            <p><strong>Vista de solo lectura.</strong> Tu perfil no puede modificar pagos.</p>
+          </div>
+          <div class="admin-search-bar">
+            <input type="text" id="search-payments" placeholder="Buscar alumno..." oninput="renderPaymentsAdmin()">
+          </div>
+          <div id="payments-admin-table" class="students-table"></div>
+        </div>
+
+        <!-- Panel: Conducta -->
+        <div id="panel-conducta-admin" class="admin-panel">
+          <div class="page-title" style="margin-bottom:18px;">⭐ Conducta</div>
+          <div id="conducta-readonly-notice" class="readonly-notice" style="display:none;">
+            <div class="icon">👁️</div>
+            <p><strong>Vista de solo lectura.</strong> Tu perfil no puede agregar registros de conducta.</p>
+          </div>
+          <div class="admin-search-bar">
+            <input type="text" id="search-conducta" placeholder="Buscar alumno..." oninput="renderConductaAdmin()">
+            <button class="btn-gold" id="btn-add-conducta" onclick="openConductaModal()">+ Agregar Registro</button>
+          </div>
+          <div id="conducta-admin-table" class="students-table"></div>
+        </div>
+
+        <!-- Panel: Comentarios -->
+        <div id="panel-comments-admin" class="admin-panel">
+          <div class="page-title" style="margin-bottom:18px;">💬 Comentarios por Alumno</div>
+          <div id="comments-readonly-notice" class="readonly-notice" style="display:none;">
+            <div class="icon">👁️</div>
+            <p><strong>Vista de solo lectura.</strong> Tu perfil no puede editar comentarios.</p>
+          </div>
+          <div class="admin-search-bar">
+            <input type="text" id="search-comments" placeholder="Nombre o matrícula del alumno...">
+            <select id="comment-eval">
+              <option value="1">1ª Evaluación</option><option value="2">2ª Evaluación</option><option value="3">3ª Evaluación</option>
+            </select>
+            <button class="btn-primary" onclick="findStudentComment()">Buscar</button>
+          </div>
+          <div id="comment-editor" style="display:none;background:white;border-radius:12px;padding:28px;box-shadow:0 2px 14px rgba(0,0,0,.07);">
+            <div id="comment-student-info" style="margin-bottom:18px;"></div>
+            <div class="modal-field">
+              <label>Comentario del maestro / administrador</label>
+              <textarea id="comment-text" rows="5" style="width:100%;padding:12px;border:2px solid #ede8df;border-radius:8px;font-family:'Crimson Pro',serif;font-size:1rem;outline:none;"></textarea>
+            </div>
+            <div style="margin-top:13px;display:flex;gap:10px;justify-content:flex-end;">
+              <button class="btn-primary" id="btn-save-comment" onclick="saveComment()">💾 Guardar comentario</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel: Cambridge Admin -->
+        <div id="panel-cambridge-admin" class="admin-panel">
+          <div class="page-title" style="margin-bottom:18px;">🏅 Vista General Cambridge</div>
+          <div class="readonly-notice">
+            <div class="icon">🏅</div>
+            <p><strong>Panel informativo.</strong> Distribución de alumnos por nivel Cambridge en la escuela.</p>
+          </div>
+          <div class="cambridge-overview" id="cambridge-overview"></div>
+          <div class="cambridge-intro" style="margin-top:10px;">
+            <h2>Estadísticas Académicas</h2>
+            <p>Resumen del progreso de los alumnos por nivel de certificación Cambridge English.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODALS ═══ -->
+<!-- Student Modal -->
+<div class="modal-overlay" id="modal-student">
+  <div class="modal">
+    <div class="modal-title">
+      <span id="modal-student-title">Nuevo Alumno</span>
+      <button class="modal-close" onclick="closeModal('modal-student')">✕</button>
+    </div>
+    <div class="modal-grid">
+      <div class="modal-field"><label>Nombre Completo</label><input type="text" id="m-nombre"></div>
+      <div class="modal-field"><label>Matrícula</label><input type="text" id="m-matricula" maxlength="5" style="text-transform:uppercase"></div>
+      <div class="modal-field"><label>Fecha de Nacimiento</label><input type="date" id="m-fecha"></div>
+      <div class="modal-field"><label>Nivel</label>
+        <select id="m-nivel">
+          <option>A1 — Beginner</option><option>A2 — Elementary</option>
+          <option>B1 — Pre-Intermediate</option><option>B2 — Upper-Intermediate</option>
+          <option>C1 — Advanced</option><option>C2 — Proficiency</option>
+        </select>
+      </div>
+      <div class="modal-field"><label>Correo Electrónico</label><input type="email" id="m-email"></div>
+      <div class="modal-field"><label>Teléfono</label><input type="tel" id="m-telefono"></div>
+      <div class="modal-field"><label>Turno</label>
+        <select id="m-turno"><option>Matutino</option><option>Vespertino</option><option>Sabatino</option></select>
+      </div>
+      <div class="modal-field"><label>Bloques Pagados (0–10)</label><input type="number" id="m-bloques" min="0" max="10" value="0"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-edit" onclick="closeModal('modal-student')">Cancelar</button>
+      <button class="btn-gold" onclick="saveStudent()">💾 Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Grades Modal -->
+<div class="modal-overlay" id="modal-grades">
+  <div class="modal">
+    <div class="modal-title">
+      <span id="modal-grades-title">Editar Calificaciones</span>
+      <button class="modal-close" onclick="closeModal('modal-grades')">✕</button>
+    </div>
+    <div id="modal-grades-body"></div>
+    <div class="modal-actions">
+      <button class="btn-edit" onclick="closeModal('modal-grades')">Cancelar</button>
+      <button class="btn-gold" onclick="saveGrades()">💾 Guardar Calificaciones</button>
+    </div>
+  </div>
+</div>
+
+<!-- Payments Modal (date per block) -->
+<div class="modal-overlay" id="modal-payments">
+  <div class="modal">
+    <div class="modal-title">
+      <span id="modal-payments-title">Gestionar Pagos</span>
+      <button class="modal-close" onclick="closeModal('modal-payments')">✕</button>
+    </div>
+    <div id="modal-payments-body"></div>
+    <div class="modal-actions">
+      <button class="btn-edit" onclick="closeModal('modal-payments')">Cancelar</button>
+      <button class="btn-gold" onclick="savePayments()">💾 Guardar Pagos</button>
+    </div>
+  </div>
+</div>
+
+<!-- Conducta Modal -->
+<div class="modal-overlay" id="modal-conducta">
+  <div class="modal">
+    <div class="modal-title">
+      <span>Agregar Registro de Conducta</span>
+      <button class="modal-close" onclick="closeModal('modal-conducta')">✕</button>
+    </div>
+    <div class="modal-grid">
+      <div class="modal-field"><label>Matrícula del Alumno</label><input type="text" id="c-matricula" maxlength="5" style="text-transform:uppercase"></div>
+      <div class="modal-field"><label>Tipo</label>
+        <select id="c-tipo">
+          <option value="positivo">✅ Positivo</option>
+          <option value="advertencia">⚠️ Advertencia</option>
+          <option value="negativo">❌ Negativo</option>
+        </select>
+      </div>
+      <div class="modal-field"><label>Fecha</label><input type="date" id="c-fecha"></div>
+      <div class="modal-field full"><label>Descripción</label><textarea id="c-desc" rows="3"></textarea></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-edit" onclick="closeModal('modal-conducta')">Cancelar</button>
+      <button class="btn-gold" onclick="saveConducta()">💾 Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════
+//  PERMISSIONS
+// ═══════════════════════════════════════════
+const ADMIN_CONFIG = {
+  DIR: {
+    name: 'Director General',
+    badge: 'director',
+    label: '🏛️ Director General',
+    pass: 'director2024',
+    canEditStudents: true,
+    canEditGrades: true,
+    canEditPayments: true,
+    canEditConducta: true,
+    canEditComments: true,
+    canAddStudents: true,
+  },
+  COO: {
+    name: 'Coordinación Académica',
+    badge: 'coordinacion',
+    label: '📋 Coordinación Académica',
+    pass: 'coord2024',
+    canEditStudents: true,
+    canEditGrades: true,
+    canEditPayments: true,
+    canEditConducta: true,
+    canEditComments: true,
+    canAddStudents: true,
+  },
+  MAE: {
+    name: 'Maestro',
+    badge: 'maestro',
+    label: '🍎 Maestro',
+    pass: 'maestro2024',
+    canEditStudents: false,
+    canEditGrades: true,
+    canEditPayments: false,
+    canEditConducta: false,
+    canEditComments: true,
+    canAddStudents: false,
+  },
+  CAM: {
+    name: 'Cambridge Coordinator',
+    badge: 'cambridge',
+    label: '🏅 Cambridge Coordinator',
+    pass: 'cambridge2024',
+    canEditStudents: false,
+    canEditGrades: false,
+    canEditPayments: false,
+    canEditConducta: false,
+    canEditComments: false,
+    canAddStudents: false,
+  },
+};
+
+let currentAdminRole = null;
+let currentStudent = null;
+let editingStudentId = null;
+let gradeEditId = null;
+let gradeEditEval = null;
+let paymentEditId = null;
+let currentTipIndex = 0;
+
+// ═══════════════════════════════════════════
+//  DATABASE
+// ═══════════════════════════════════════════
+const firstNames = ['Sofía','Mateo','Isabella','Sebastián','Valentina','Santiago','Camila','Daniel','Emma','Nicolás','Lucía','Diego','Gabriela','Andrés','Mariana','Alejandro','Fernanda','Carlos','Ana Sofía','Miguel','Renata','Emilio','Paula','Javier','Andrea','Luis','Natalia','Roberto','Patricia','Fernando','Claudia','Eduardo','Karla','Héctor','Mónica','Arturo','Verónica','Raúl','Lorena','Gerardo'];
+const lastNames = ['García','Martínez','López','González','Hernández','Pérez','Rodríguez','Sánchez','Ramírez','Cruz','Torres','Flores','Rivera','Morales','Jiménez','Medina','Reyes','Castillo','Vargas','Mendoza','Ortiz','Díaz','Suárez','Moreno','Guerrero','Gutiérrez','Núñez','Domínguez','Vega','Alvarado','Romero','Salazar','Ramos','Miranda','Aguilar','Serrano','Fuentes','Ruiz','Silva','Navarro'];
+const niveles = ['A1 — Beginner','A2 — Elementary','B1 — Pre-Intermediate','B2 — Upper-Intermediate','C1 — Advanced','C2 — Proficiency'];
+const turnos = ['Matutino','Vespertino','Sabatino'];
+
+function rnd(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+function pick(arr){return arr[rnd(0,arr.length-1)];}
+function randGrade(){return rnd(55,100);}
+
+function randDate(yearFrom,yearTo){
+  const y=rnd(yearFrom,yearTo);
+  const m=String(rnd(1,12)).padStart(2,'0');
+  const d=String(rnd(1,28)).padStart(2,'0');
+  return `${y}-${m}-${d}`;
+}
+
+let DB = {};
+
+function initDB(){
+  for(let i=1;i<=1000;i++){
+    const id = 'A'+String(i).padStart(4,'0');
+    const nombre = pick(firstNames)+' '+pick(lastNames)+' '+pick(lastNames);
+    const nivel = pick(niveles);
+    const bloquesPagados = rnd(0,10);
+    // Generate payment dates for paid blocks
+    const pagoFechas = {};
+    for(let b=1;b<=bloquesPagados;b++){
+      pagoFechas[b] = randDate(2024,2025);
+    }
+    DB[id]={
+      id, nombre, nivel, turno:pick(turnos),
+      fecha: randDate(1990,2015),
+      email:`${nombre.split(' ')[0].toLowerCase()}${id.toLowerCase()}@email.com`,
+      telefono:`712${String(rnd(1000000,9999999))}`,
+      bloquesPagados,
+      pagoFechas,
+      calificaciones:{
+        1:{examen:randGrade(),participacion:randGrade(),asistencia:randGrade(),libreta:randGrade(),comentario:''},
+        2:{examen:randGrade(),participacion:randGrade(),asistencia:randGrade(),libreta:randGrade(),comentario:''},
+        3:{examen:randGrade(),participacion:randGrade(),asistencia:randGrade(),libreta:randGrade(),comentario:''},
+      },
+      conducta: generateConducta(),
+    };
+  }
+}
+
+function generateConducta(){
+  const descs={
+    positivo:['Excelente participación en clase','Entregó tarea completa y bien elaborada','Ayudó a compañeros durante actividad','Puntualidad ejemplar todo el mes','Obtuvo calificación perfecta en examen oral'],
+    advertencia:['Llegó tarde a clase sin justificación','Tarea incompleta o con poco esfuerzo','Habló sin permiso interrumpiendo la clase','Olvidó su libro de texto'],
+    negativo:['Falta de respeto hacia un compañero','No asistió sin justificación','Uso de celular durante clase sin autorización'],
+  };
+  const tipos=['positivo','advertencia','negativo'];
+  const records=[];
+  const n=rnd(1,6);
+  for(let i=0;i<n;i++){
+    const tipo=pick(tipos);
+    records.push({fecha:randDate(2024,2025),tipo,descripcion:pick(descs[tipo])});
+  }
+  return records.sort((a,b)=>b.fecha.localeCompare(a.fecha));
+}
+
+// ═══════════════════════════════════════════
+//  AUTH
+// ═══════════════════════════════════════════
+function switchLoginTab(tab){
+  document.querySelectorAll('.login-tab').forEach((t,i)=>{
+    t.classList.toggle('active',(i===0&&tab==='alumno')||(i===1&&tab==='admin'));
+  });
+  document.getElementById('form-alumno').classList.toggle('active',tab==='alumno');
+  document.getElementById('form-admin').classList.toggle('active',tab==='admin');
+}
+
+function loginAlumno(){
+  const mat=document.getElementById('matricula-input').value.toUpperCase().trim();
+  const pass=document.getElementById('pass-alumno').value;
+  const err=document.getElementById('error-alumno');
+  if(DB[mat]&&pass===mat){
+    currentStudent=DB[mat]; err.style.display='none';
+    showStudentDashboard();
+  } else { err.style.display='block'; document.getElementById('pass-alumno').value=''; }
+}
+
+function loginAdmin(){
+  const role=document.getElementById('admin-select').value;
+  const pass=document.getElementById('pass-admin').value;
+  const err=document.getElementById('error-admin');
+  if(role&&ADMIN_CONFIG[role]&&ADMIN_CONFIG[role].pass===pass){
+    currentAdminRole=role; err.style.display='none';
+    showAdminDashboard();
+  } else { err.style.display='block'; document.getElementById('pass-admin').value=''; }
+}
+
+function logout(){
+  currentStudent=null; currentAdminRole=null;
+  document.getElementById('login-page').style.display='flex';
+  document.getElementById('student-dashboard').style.display='none';
+  document.getElementById('admin-dashboard').style.display='none';
+  document.getElementById('matricula-input').value='';
+  document.getElementById('pass-alumno').value='';
+  document.getElementById('pass-admin').value='';
+  document.getElementById('admin-select').value='';
+  document.getElementById('error-alumno').style.display='none';
+  document.getElementById('error-admin').style.display='none';
+}
+
+// ═══════════════════════════════════════════
+//  STUDENT DASHBOARD
+// ═══════════════════════════════════════════
+function showStudentDashboard(){
+  document.getElementById('login-page').style.display='none';
+  document.getElementById('student-dashboard').style.display='block';
+  document.getElementById('student-name-header').textContent=currentStudent.nombre;
+  document.getElementById('student-id-header').textContent=currentStudent.id;
+  document.getElementById('pay-ref').textContent=currentStudent.id;
+  document.getElementById('pay-ref2').textContent=currentStudent.id;
+  showTab('cuenta');
+  renderCuenta(); renderDatos(); renderCambridge(); renderConductaStudent(); renderGradesStats();
+  showEval(1,document.querySelector('.eval-btn.active'));
+  renderDailyChallenge();
+  initTips();
+}
+
+function showTab(name){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  const idx={cuenta:0,calificaciones:1,datos:2,cambridge:3,conducta:4,contacto:5};
+  document.querySelectorAll('.tab-btn')[idx[name]].classList.add('active');
+}
+
+// CUENTA
+function renderCuenta(){
+  const s=currentStudent;
+  const paid=s.bloquesPagados, pend=10-paid;
+  document.getElementById('account-summary').innerHTML=`
+    <div class="summary-card paid"><div class="amount">${paid}</div><div class="lbl">Bloques Pagados</div></div>
+    <div class="summary-card pending"><div class="amount">${pend}</div><div class="lbl">Bloques Pendientes</div></div>
+    <div class="summary-card total"><div class="amount">$${(paid*550).toLocaleString()}</div><div class="lbl">Total Pagado</div></div>
+    <div class="summary-card debt"><div class="amount">$${(pend*550).toLocaleString()}</div><div class="lbl">Saldo Pendiente</div></div>`;
+  let html='';
+  for(let i=1;i<=10;i++){
+    const isPaid=i<=paid;
+    const fecha=isPaid&&s.pagoFechas&&s.pagoFechas[i]?fmtDate(s.pagoFechas[i]):'';
+    html+=`<div class="block-item ${isPaid?'paid':'pending'}">
+      ${isPaid?'<div class="block-check">✓</div>':''}
+      <div class="block-num">BLOQUE ${i}</div>
+      <div class="block-amount">$550</div>
+      <div class="block-status">${isPaid?'✓ Pagado':'Pendiente'}</div>
+      ${isPaid&&fecha?`<span class="block-date">📅 ${fecha}</span>`:''}
+    </div>`;
+  }
+  document.getElementById('blocks-grid').innerHTML=html;
+}
+
+function fmtDate(d){
+  if(!d) return '';
+  const [y,m,day]=d.split('-');
+  const months=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  return `${parseInt(day)} ${months[parseInt(m)-1]} ${y}`;
+}
+
+// GRADES STATS BANNER
+function renderGradesStats(){
+  const s=currentStudent;
+  const avgs=[1,2,3].map(e=>{
+    const ev=s.calificaciones[e];
+    return Math.round(ev.examen*.4+ev.participacion*.2+ev.asistencia*.2+ev.libreta*.2);
+  });
+  const globalAvg=Math.round(avgs.reduce((a,b)=>a+b,0)/3);
+  const best=Math.max(...avgs);
+  document.getElementById('grades-stats-banner').innerHTML=`
+    <div class="stat-banner-card"><div class="sbc-num">${globalAvg}</div><div class="sbc-lbl">Promedio General</div></div>
+    <div class="stat-banner-card gc"><div class="sbc-num">${best}</div><div class="sbc-lbl">Mejor Evaluación</div></div>
+    <div class="stat-banner-card gr"><div class="sbc-num">${avgs.filter(a=>a>=70).length}/3</div><div class="sbc-lbl">Evaluaciones Aprobadas</div></div>`;
+}
+
+// EVAL
+function showEval(num,btn){
+  document.querySelectorAll('.eval-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  const s=currentStudent;
+  const ev=s.calificaciones[num];
+  const cats=[
+    {key:'examen',label:'📝 Examen',pct:'40%'},
+    {key:'participacion',label:'🙋 Participación',pct:'20%'},
+    {key:'asistencia',label:'📅 Asistencia',pct:'20%'},
+    {key:'libreta',label:'📓 Libreta',pct:'20%'},
+  ];
+  function cls(v){return v>=90?'excellent':v>=80?'good':v>=70?'average':'low';}
+  function scls(v){return v>=90?'s-ex':v>=80?'s-go':v>=70?'s-av':'s-lo';}
+  const avg=Math.round(ev.examen*.4+ev.participacion*.2+ev.asistencia*.2+ev.libreta*.2);
+  const passed=avg>=70;
+  const evalNames=['Primera','Segunda','Tercera'];
+  let rows=cats.map(c=>{
+    const v=ev[c.key];
+    return `<div class="grade-row">
+      <div class="grade-category">${c.label}</div>
+      <div>
+        <div class="grade-bar"><div class="grade-bar-fill ${cls(v)}" style="width:${v}%"></div></div>
+        <div style="font-size:.72rem;color:#9ca3af;">${c.pct} del total</div>
+      </div>
+      <div style="font-size:.8rem;color:#9ca3af;">/100</div>
+      <div class="grade-score ${scls(v)}">${v}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('eval-content').innerHTML=`
+    <div class="grades-card">
+      <div class="grades-header"><h3>${evalNames[num-1]} Evaluación 2024–2025</h3><span>Período ${num} de 3</span></div>
+      <div class="grades-body">
+        <div class="grade-row hdr">
+          <div class="g-lbl">Área</div><div class="g-lbl">Progreso</div>
+          <div class="g-lbl">Máx.</div><div class="g-lbl">Calif.</div>
+        </div>
+        ${rows}
+        <div class="final-grade-box">
+          <div class="fl">Calificación Final</div>
+          <div class="fs">${avg}</div>
+          <div class="fst ${passed?'':'rep'}">${passed?'✓ Aprobado':'✗ Reprobado'}</div>
+        </div>
+      </div>
+    </div>
+    <div class="comments-section">
+      <h4>💬 Comentarios del Maestro</h4>
+      <div class="comment-box">${ev.comentario||'Sin comentarios para esta evaluación aún.'}</div>
+      ${ev.comentario?`<div class="comment-author">— Personal docente, Británico Villa del Carbón</div>`:''}
+    </div>`;
+}
+
+// DATOS
+function renderDatos(){
+  const s=currentStudent;
+  document.getElementById('profile-name').textContent=s.nombre;
+  document.getElementById('profile-nivel').textContent=s.nivel;
+  const dob=new Date(s.fecha+'T00:00:00');
+  const age=new Date().getFullYear()-dob.getFullYear();
+  document.getElementById('profile-fields').innerHTML=`
+    <div class="profile-field"><label>Matrícula</label><div class="val">${s.id}</div></div>
+    <div class="profile-field"><label>Fecha de Nacimiento</label><div class="val">${dob.toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric'})} · ${age} años</div></div>
+    <div class="profile-field"><label>Correo Electrónico</label><div class="val">${s.email}</div></div>
+    <div class="profile-field"><label>Teléfono</label><div class="val">${s.telefono}</div></div>
+    <div class="profile-field"><label>Nivel</label><div class="val">${s.nivel}</div></div>
+    <div class="profile-field"><label>Turno</label><div class="val">${s.turno}</div></div>`;
+}
+
+// CAMBRIDGE
+const cambridgeLevels=[
+  {code:'A1',name:'Pre A1 Starters',cls:'lb-a1',cefr:'A1',desc:'Primer paso ideal para niños. Evalúa vocabulario básico y comunicación cotidiana simple.',skills:['Listening','Reading','Speaking','Writing'],duration:'~45 minutos',details:['Prueba oral cara a cara con el examinador','Vocabulario cotidiano básico','Reconocida por escuelas primarias','Certificado de logro']},
+  {code:'A2',name:'Key English Test (KET)',cls:'lb-a2',cefr:'A2',desc:'Certifica habilidades comunicativas en situaciones cotidianas y reales del día a día.',skills:['Reading','Writing','Listening','Speaking'],duration:'~2 horas',details:['Válido de por vida','Reconocido por universidades e instituciones','Disponible en papel y computadora','Escala A–E']},
+  {code:'B1',name:'Preliminary (PET)',cls:'lb-b1',cefr:'B1',desc:'Nivel intermedio. Capacidad de comunicación en contextos cotidianos, de trabajo y estudio.',skills:['Reading','Writing','Listening','Speaking'],duration:'~2h 30min',details:['Útil para trabajo y estudio en el extranjero','Reconocido por +25,000 instituciones','Escala A–E con distinción','Preparación ideal para B2']},
+  {code:'B2',name:'First Certificate (FCE)',cls:'lb-b2',cefr:'B2',desc:'El más solicitado por universidades europeas. Acredita inglés profesional y académico.',skills:['Reading & Use of English','Writing','Listening','Speaking'],duration:'~3h 30min',details:['Requisito en universidades europeas','Aceptado por miles de empleadores','Escala A–E','Certificado de vigencia permanente']},
+  {code:'C1',name:'Advanced (CAE)',cls:'lb-c1',cefr:'C1',desc:'Nivel avanzado reconocido por las mejores universidades del mundo.',skills:['Reading & Use of English','Writing','Listening','Speaking'],duration:'~4 horas',details:['Aceptado en Harvard, Oxford, MIT','Reconocido por +25,000 instituciones','Alta demanda en mercado laboral global','Escala A–E con distinción']},
+  {code:'C2',name:'Proficiency (CPE)',cls:'lb-c2',cefr:'C2',desc:'El nivel más alto Cambridge. Equivalente a hablante nativo cultivado. El mayor logro.',skills:['Reading & Use of English','Writing','Listening','Speaking'],duration:'~4 horas',details:['Reconocimiento global máximo','Muy pocas personas lo alcanzan','Permanece vigente de por vida','Escala A–E con distinción']},
+];
+
+function renderCambridge(){
+  document.getElementById('cambridge-levels').innerHTML=cambridgeLevels.map(l=>`
+    <div class="level-card" onclick="toggleLevel('${l.code}')">
+      <div class="level-header">
+        <div class="level-badge ${l.cls}">${l.code}</div>
+        <div class="level-info"><h3>${l.name}</h3><span>CEFR Nivel ${l.cefr}</span></div>
+      </div>
+      <div class="level-body">
+        <div class="level-desc">${l.desc}</div>
+        <div class="level-skills">${l.skills.map(s=>`<span class="skill-tag">${s}</span>`).join('')}</div>
+        <div class="level-duration">⏱ ${l.duration} · Haz clic para más info</div>
+      </div>
+      <div class="level-detail" id="level-${l.code}">
+        <br><strong style="font-family:'Playfair Display',serif;font-size:.88rem;color:#1a2744;display:block;margin-bottom:8px;">¿Por qué obtenerlo?</strong>
+        <ul>${l.details.map(d=>`<li>${d}</li>`).join('')}</ul>
+      </div>
+    </div>`).join('');
+}
+
+function toggleLevel(code){
+  document.getElementById('level-'+code).classList.toggle('open');
+}
+
+// TIPS (didactic)
+const tips=[
+  {text:'"The limits of my language mean the limits of my world." — Wittgenstein',source:'Filosofía del lenguaje',tag:'Reflexión del día'},
+  {text:'Estudiar 30 minutos de inglés diario es más efectivo que 3 horas una vez por semana.',source:'Lingüística aplicada',tag:'Consejo de estudio'},
+  {text:'Hablar en voz alta al practicar mejora tu pronunciación hasta un 40%.',source:'Neurociencia del lenguaje',tag:'Técnica de aprendizaje'},
+  {text:'"To have another language is to possess a second soul." — Carlomagno',source:'Cita histórica',tag:'Inspiración'},
+  {text:'Ver series en inglés con subtítulos en inglés acelera tu comprensión auditiva.',source:'Metodología Cambridge',tag:'Consejo práctico'},
+  {text:'El inglés es el idioma oficial de 67 países y la lengua franca del comercio global.',source:'UNESCO 2024',tag:'Dato curioso'},
+  {text:'El vocabulario C2 abarca más de 8,000 palabras activas en contexto académico.',source:'Cambridge Assessment English',tag:'Meta Cambridge'},
+];
+function initTips(){
+  const t=tips[currentTipIndex];
+  document.getElementById('tip-text').textContent=t.text;
+  document.getElementById('tip-source').textContent=t.source;
+  const el=document.getElementById('tip-carousel');
+  el.querySelector('.tip-tag').textContent='💡 '+t.tag;
+  document.getElementById('tip-dots').innerHTML=tips.map((_,i)=>`<div class="tip-dot ${i===currentTipIndex?'active':''}"></div>`).join('');
+}
+function nextTip(){
+  currentTipIndex=(currentTipIndex+1)%tips.length;
+  initTips();
+}
+
+// DAILY CHALLENGE
+const challenges=[
+  {q:'Choose the correct form: "She ___ to school every day."',opts:['go','goes','going','gone'],correct:1,explanation:'"Goes" porque la 3ª persona singular (he/she/it) añade -es/-s en presente simple.'},
+  {q:'What does "perseverance" mean in Spanish?',opts:['pereza','constancia','alegría','confusión'],correct:1,explanation:'"Perseverance" significa constancia o perseverancia — seguir adelante pese a las dificultades.'},
+  {q:'Which is the correct comparative? "This book is ___ than that one."',opts:['more easy','most easy','easier','easiest'],correct:2,explanation:'Los adjetivos cortos (1 sílaba) forman el comparativo añadiendo -er: easy → easier.'},
+  {q:'Translate: "I haven\'t seen him since last year."',opts:['No lo veo hace un año','No lo he visto desde el año pasado','No lo veré hasta el próximo año','No lo vi el año pasado'],correct:1,explanation:'"Since" indica desde un punto específico en el tiempo; "haven\'t seen" es Present Perfect.'},
+];
+let challengeAnswered=false;
+function renderDailyChallenge(){
+  const ch=challenges[rnd(0,challenges.length-1)];
+  challengeAnswered=false;
+  document.getElementById('daily-challenge').innerHTML=`
+    <div class="dc-tag">🎯 Reto de Inglés del Día</div>
+    <div class="dc-question">${ch.q}</div>
+    <div class="dc-options">
+      ${ch.opts.map((o,i)=>`<button class="dc-opt" onclick="answerChallenge(this,${i},${ch.correct},'${ch.explanation.replace(/'/g,"\\'")}')">
+        <strong>${String.fromCharCode(65+i)}.</strong> ${o}
+      </button>`).join('')}
+    </div>
+    <div class="dc-result" id="dc-result"></div>`;
+}
+function answerChallenge(btn,idx,correct,explanation){
+  if(challengeAnswered) return;
+  challengeAnswered=true;
+  const opts=document.querySelectorAll('.dc-opt');
+  opts[correct].classList.add('correct');
+  if(idx!==correct) btn.classList.add('wrong');
+  const res=document.getElementById('dc-result');
+  res.style.display='block';
+  res.innerHTML=idx===correct?`✅ <strong>¡Correcto!</strong> ${explanation}`:`❌ <strong>Respuesta incorrecta.</strong> ${explanation}`;
+}
+
+// CONDUCTA STUDENT
+function renderConductaStudent(){
+  const s=currentStudent;
+  const pos=s.conducta.filter(c=>c.tipo==='positivo').length;
+  const adv=s.conducta.filter(c=>c.tipo==='advertencia').length;
+  const neg=s.conducta.filter(c=>c.tipo==='negativo').length;
+  document.getElementById('conduct-summary').innerHTML=`
+    <div class="conduct-stat g"><div class="number">${pos}</div><div class="stat-label">Positivos</div></div>
+    <div class="conduct-stat w"><div class="number">${adv}</div><div class="stat-label">Advertencias</div></div>
+    <div class="conduct-stat b"><div class="number">${neg}</div><div class="stat-label">Negativos</div></div>
+    <div class="conduct-stat n"><div class="number">${s.conducta.length}</div><div class="stat-label">Total</div></div>`;
+  const rows=s.conducta.map(c=>`<tr>
+    <td>${c.fecha}</td>
+    <td><span class="badge-conduct ${c.tipo}">${c.tipo==='positivo'?'✅ Positivo':c.tipo==='advertencia'?'⚠️ Advertencia':'❌ Negativo'}</span></td>
+    <td>${c.descripcion}</td>
+  </tr>`).join('');
+  document.getElementById('conduct-record').innerHTML=`
+    <div class="conduct-record-header"><h3>Historial 2024–2025</h3><span>${s.conducta.length} registros</span></div>
+    <table class="conduct-table">
+      <thead><tr><th>Fecha</th><th>Tipo</th><th>Descripción</th></tr></thead>
+      <tbody>${rows||'<tr><td colspan="3" style="text-align:center;padding:20px;color:#9ca3af;">Sin registros de conducta</td></tr>'}</tbody>
+    </table>`;
+}
+
+// ═══════════════════════════════════════════
+//  ADMIN DASHBOARD
+// ═══════════════════════════════════════════
+function showAdminDashboard(){
+  document.getElementById('login-page').style.display='none';
+  document.getElementById('admin-dashboard').style.display='block';
+  const cfg=ADMIN_CONFIG[currentAdminRole];
+  document.getElementById('admin-name-header').textContent=cfg.name;
+  const badge=document.getElementById('admin-perm-badge');
+  badge.textContent=cfg.label;
+  badge.className='perm-badge '+cfg.badge;
+  applyPermissions();
+  renderAdminStats();
+  renderStudentsTable();
+  renderCambridgeAdmin();
+  const today=new Date().toISOString().split('T')[0];
+  document.getElementById('c-fecha').value=today;
+}
+
+function applyPermissions(){
+  const cfg=ADMIN_CONFIG[currentAdminRole];
+  // Students panel
+  document.getElementById('students-readonly-notice').style.display=cfg.canEditStudents?'none':'flex';
+  document.getElementById('btn-new-student').style.display=cfg.canAddStudents?'':'none';
+  // Payments panel
+  document.getElementById('payments-readonly-notice').style.display=cfg.canEditPayments?'none':'flex';
+  // Conducta panel
+  document.getElementById('conducta-readonly-notice').style.display=cfg.canEditConducta?'none':'flex';
+  document.getElementById('btn-add-conducta').style.display=cfg.canEditConducta?'':'none';
+  // Comments panel
+  document.getElementById('comments-readonly-notice').style.display=cfg.canEditComments?'none':'flex';
+  document.getElementById('btn-save-comment').style.display=cfg.canEditComments?'':'none';
+  // Cambridge coordinator: disable most nav buttons, show cambridge view
+  const isReadOnly=currentAdminRole==='CAM';
+  if(isReadOnly){
+    // Only students view + cambridge
+    ['nav-grades','nav-payments','nav-conducta-admin','nav-comments-admin'].forEach(id=>{
+      const btn=document.getElementById(id);
+      if(btn){btn.style.opacity='.35';btn.style.pointerEvents='none';}
+    });
+  } else {
+    ['nav-grades','nav-payments','nav-conducta-admin','nav-comments-admin'].forEach(id=>{
+      const btn=document.getElementById(id);
+      if(btn){btn.style.opacity='';btn.style.pointerEvents='';}
+    });
+  }
+}
+
+function renderAdminStats(){
+  const students=Object.values(DB);
+  const totalPagados=students.reduce((a,s)=>a+s.bloquesPagados,0);
+  document.getElementById('stat-pagados').textContent=totalPagados.toLocaleString();
+  document.getElementById('stat-ingresos').textContent='$'+(totalPagados*550).toLocaleString();
+  document.getElementById('stat-pendientes').textContent=(students.length*10-totalPagados).toLocaleString();
+}
+
+// STUDENTS TABLE
+let currentPage=1; const pageSize=15;
+function renderStudentsTable(){
+  const search=document.getElementById('search-students').value.toLowerCase();
+  const nivelFilter=document.getElementById('filter-nivel').value;
+  const cfg=ADMIN_CONFIG[currentAdminRole];
+  let students=Object.values(DB);
+  if(search) students=students.filter(s=>s.nombre.toLowerCase().includes(search)||s.id.toLowerCase().includes(search));
+  if(nivelFilter) students=students.filter(s=>s.nivel===nivelFilter);
+  const total=students.length;
+  const pages=Math.ceil(total/pageSize);
+  if(currentPage>pages) currentPage=1;
+  const slice=students.slice((currentPage-1)*pageSize,currentPage*pageSize);
+  const rows=slice.map(s=>`<tr>
+    <td><span class="student-id-badge">${s.id}</span></td>
+    <td>${s.nombre}</td>
+    <td>${s.nivel.split('—')[0].trim()}</td>
+    <td>${s.turno}</td>
+    <td>${s.bloquesPagados}/10</td>
+    <td>${cfg.canEditStudents?`<button class="btn-edit" onclick="editStudent('${s.id}')">✏️ Editar</button>`:'<span style="color:#9ca3af;font-size:.82rem;">Solo lectura</span>'}</td>
+  </tr>`).join('');
+  let pgBtns='';
+  const start=Math.max(1,currentPage-2),end=Math.min(pages,currentPage+2);
+  if(start>1) pgBtns+=`<button class="page-btn" onclick="goPage(1)">1</button>${start>2?'<span style="padding:0 4px;color:#9ca3af">…</span>':''}`;
+  for(let i=start;i<=end;i++) pgBtns+=`<button class="page-btn ${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+  if(end<pages) pgBtns+=`${end<pages-1?'<span style="padding:0 4px;color:#9ca3af">…</span>':''}<button class="page-btn" onclick="goPage(${pages})">${pages}</button>`;
+  document.getElementById('students-table-container').innerHTML=`
+    <table>
+      <thead><tr><th>Matrícula</th><th>Nombre</th><th>Nivel</th><th>Turno</th><th>Pagos</th><th>Acción</th></tr></thead>
+      <tbody>${rows||'<tr><td colspan="6" style="text-align:center;padding:20px;">Sin resultados</td></tr>'}</tbody>
+    </table>
+    <div class="pagination">
+      <button class="page-btn" onclick="goPage(${Math.max(1,currentPage-1)})">‹</button>
+      ${pgBtns}
+      <button class="page-btn" onclick="goPage(${Math.min(pages||1,currentPage+1)})">›</button>
+      <span class="page-info">${total} alumnos</span>
+    </div>`;
+}
+function goPage(p){currentPage=p;renderStudentsTable();}
+
+function editStudent(id){
+  const s=DB[id]; editingStudentId=id;
+  document.getElementById('modal-student-title').textContent='Editar Alumno — '+id;
+  document.getElementById('m-nombre').value=s.nombre;
+  document.getElementById('m-matricula').value=s.id;
+  document.getElementById('m-matricula').disabled=true;
+  document.getElementById('m-fecha').value=s.fecha;
+  document.getElementById('m-nivel').value=s.nivel;
+  document.getElementById('m-email').value=s.email;
+  document.getElementById('m-telefono').value=s.telefono;
+  document.getElementById('m-turno').value=s.turno;
+  document.getElementById('m-bloques').value=s.bloquesPagados;
+  openModal('modal-student');
+}
+function openNewStudentModal(){
+  editingStudentId=null;
+  document.getElementById('modal-student-title').textContent='Nuevo Alumno';
+  ['m-nombre','m-email','m-telefono'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('m-matricula').value=''; document.getElementById('m-matricula').disabled=false;
+  document.getElementById('m-fecha').value=''; document.getElementById('m-nivel').value='A1 — Beginner';
+  document.getElementById('m-turno').value='Matutino'; document.getElementById('m-bloques').value='0';
+  openModal('modal-student');
+}
+function saveStudent(){
+  const id=editingStudentId||document.getElementById('m-matricula').value.toUpperCase();
+  if(!id){showToast('Ingresa una matrícula','error');return;}
+  const nombre=document.getElementById('m-nombre').value.trim();
+  if(!nombre){showToast('Ingresa el nombre','error');return;}
+  if(!DB[id]){
+    DB[id]={
+      id,nombre,nivel:document.getElementById('m-nivel').value,turno:document.getElementById('m-turno').value,
+      fecha:document.getElementById('m-fecha').value,email:document.getElementById('m-email').value,
+      telefono:document.getElementById('m-telefono').value,
+      bloquesPagados:parseInt(document.getElementById('m-bloques').value)||0,
+      pagoFechas:{},
+      calificaciones:{1:{examen:0,participacion:0,asistencia:0,libreta:0,comentario:''},2:{examen:0,participacion:0,asistencia:0,libreta:0,comentario:''},3:{examen:0,participacion:0,asistencia:0,libreta:0,comentario:''}},
+      conducta:[],
+    };
+  } else {
+    const s=DB[id];
+    s.nombre=nombre; s.nivel=document.getElementById('m-nivel').value;
+    s.turno=document.getElementById('m-turno').value; s.fecha=document.getElementById('m-fecha').value;
+    s.email=document.getElementById('m-email').value; s.telefono=document.getElementById('m-telefono').value;
+    s.bloquesPagados=parseInt(document.getElementById('m-bloques').value)||0;
+  }
+  closeModal('modal-student');
+  renderStudentsTable(); renderAdminStats();
+  showToast('Alumno guardado correctamente ✓','success');
+}
+
+// GRADES ADMIN
+function renderGradesAdmin(){
+  const search=document.getElementById('search-grades').value.toLowerCase();
+  const cfg=ADMIN_CONFIG[currentAdminRole];
+  const students=Object.values(DB).filter(s=>!search||s.nombre.toLowerCase().includes(search)||s.id.toLowerCase().includes(search)).slice(0,20);
+  const rows=students.map(s=>`<tr>
+    <td><span class="student-id-badge">${s.id}</span></td>
+    <td>${s.nombre}</td>
+    <td>${s.nivel.split('—')[0].trim()}</td>
+    <td>${cfg.canEditGrades?`<button class="btn-edit" onclick="openGradeModal('${s.id}')">✏️ Editar</button>`:'<span style="color:#9ca3af;font-size:.82rem;">Solo lectura</span>'}</td>
+  </tr>`).join('');
+  document.getElementById('grades-admin-table').innerHTML=`
+    <table>
+      <thead><tr><th>Matrícula</th><th>Nombre</th><th>Nivel</th><th>Acción</th></tr></thead>
+      <tbody>${rows||'<tr><td colspan="4" style="text-align:center;padding:20px;">Escribe para buscar un alumno</td></tr>'}</tbody>
+    </table>`;
+}
+function openGradeModal(id){
+  gradeEditId=id; gradeEditEval=parseInt(document.getElementById('eval-filter').value)||1;
+  const s=DB[id]; const ev=s.calificaciones[gradeEditEval];
+  document.getElementById('modal-grades-title').textContent=`Calificaciones — ${s.nombre} (Eval ${gradeEditEval})`;
+  document.getElementById('modal-grades-body').innerHTML=`
+    <div class="modal-grid">
+      <div class="modal-field"><label>📝 Examen (0–100)</label><input type="number" id="g-examen" min="0" max="100" value="${ev.examen}"></div>
+      <div class="modal-field"><label>🙋 Participación (0–100)</label><input type="number" id="g-participacion" min="0" max="100" value="${ev.participacion}"></div>
+      <div class="modal-field"><label>📅 Asistencia (0–100)</label><input type="number" id="g-asistencia" min="0" max="100" value="${ev.asistencia}"></div>
+      <div class="modal-field"><label>📓 Libreta (0–100)</label><input type="number" id="g-libreta" min="0" max="100" value="${ev.libreta}"></div>
+    </div>`;
+  openModal('modal-grades');
+}
+function saveGrades(){
+  const ev=DB[gradeEditId].calificaciones[gradeEditEval];
+  ev.examen=Math.min(100,Math.max(0,parseInt(document.getElementById('g-examen').value)||0));
+  ev.participacion=Math.min(100,Math.max(0,parseInt(document.getElementById('g-participacion').value)||0));
+  ev.asistencia=Math.min(100,Math.max(0,parseInt(document.getElementById('g-asistencia').value)||0));
+  ev.libreta=Math.min(100,Math.max(0,parseInt(document.getElementById('g-libreta').value)||0));
+  closeModal('modal-grades'); showToast('Calificaciones actualizadas ✓','success');
+}
+
+// PAYMENTS ADMIN (with dates)
+function renderPaymentsAdmin(){
+  const search=document.getElementById('search-payments').value.toLowerCase();
+  const cfg=ADMIN_CONFIG[currentAdminRole];
+  const students=Object.values(DB).filter(s=>!search||s.nombre.toLowerCase().includes(search)||s.id.toLowerCase().includes(search)).slice(0,20);
+  const rows=students.map(s=>{
+    const pct=Math.round(s.bloquesPagados/10*100);
+    const barColor=s.bloquesPagados>=10?'#2d6a4f':s.bloquesPagados>=5?'#c8a84b':'#9b1c2e';
+    return `<tr>
+      <td><span class="student-id-badge">${s.id}</span></td>
+      <td>${s.nombre}</td>
+      <td>${s.bloquesPagados}/10</td>
+      <td><div style="background:#ede8df;border-radius:4px;height:8px;width:110px;overflow:hidden;display:inline-block;"><div style="background:${barColor};height:100%;width:${pct}%;"></div></div></td>
+      <td>$${(s.bloquesPagados*550).toLocaleString()}</td>
+      <td>${cfg.canEditPayments?`<button class="btn-edit" onclick="openPaymentModal('${s.id}')">📅 Gestionar</button>`:'<span style="color:#9ca3af;font-size:.82rem;">Solo lectura</span>'}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('payments-admin-table').innerHTML=`
+    <table>
+      <thead><tr><th>Matrícula</th><th>Nombre</th><th>Bloques</th><th>Progreso</th><th>Monto</th><th>Gestionar</th></tr></thead>
+      <tbody>${rows||'<tr><td colspan="6" style="text-align:center;padding:20px;">Sin resultados</td></tr>'}</tbody>
+    </table>`;
+}
+
+function openPaymentModal(id){
+  paymentEditId=id;
+  const s=DB[id];
+  document.getElementById('modal-payments-title').textContent=`Pagos — ${s.nombre}`;
+  let html='<div style="display:grid;gap:10px;">';
+  for(let i=1;i<=10;i++){
+    const isPaid=i<=s.bloquesPagados;
+    const fecha=(s.pagoFechas&&s.pagoFechas[i])||'';
+    html+=`<div style="display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:10px 14px;background:${isPaid?'rgba(45,106,79,.07)':'#f8f4ed'};border-radius:8px;border:1px solid ${isPaid?'#40916c':'#ede8df'};">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <input type="checkbox" id="blk-${i}" ${isPaid?'checked':''} style="width:16px;height:16px;cursor:pointer;" onchange="syncPaymentDate(${i})">
+        <label for="blk-${i}" style="font-family:'Playfair Display',serif;font-size:.95rem;cursor:pointer;">Bloque ${i} — $550</label>
+      </div>
+      <input type="date" id="blk-date-${i}" value="${fecha}" ${!isPaid?'disabled':''} style="padding:7px 10px;border:1px solid #ede8df;border-radius:6px;font-family:'Crimson Pro',serif;font-size:.88rem;outline:none;background:${isPaid?'white':'#f0ece5'};" placeholder="Fecha de pago">
+      <span style="font-size:.75rem;color:${isPaid?'#2d6a4f':'#9ca3af'};">${isPaid?'✓ Pagado':'Pendiente'}</span>
+    </div>`;
+  }
+  html+='</div>';
+  document.getElementById('modal-payments-body').innerHTML=html;
+  openModal('modal-payments');
+}
+
+function syncPaymentDate(blockNum){
+  const chk=document.getElementById('blk-'+blockNum);
+  const dateInput=document.getElementById('blk-date-'+blockNum);
+  dateInput.disabled=!chk.checked;
+  if(chk.checked&&!dateInput.value) dateInput.value=new Date().toISOString().split('T')[0];
+  if(!chk.checked) dateInput.value='';
+}
+
+function savePayments(){
+  const s=DB[paymentEditId];
+  s.pagoFechas={};
+  let count=0;
+  for(let i=1;i<=10;i++){
+    const chk=document.getElementById('blk-'+i);
+    if(chk&&chk.checked){
+      count++;
+      const fecha=document.getElementById('blk-date-'+i).value;
+      if(fecha) s.pagoFechas[i]=fecha;
+    }
+  }
+  s.bloquesPagados=count;
+  closeModal('modal-payments');
+  renderPaymentsAdmin(); renderAdminStats();
+  showToast(`Pagos actualizados — ${count} bloques registrados ✓`,'success');
+}
+
+// CONDUCTA ADMIN
+function renderConductaAdmin(){
+  const search=document.getElementById('search-conducta').value.toLowerCase();
+  const students=Object.values(DB).filter(s=>!search||s.nombre.toLowerCase().includes(search)||s.id.toLowerCase().includes(search)).slice(0,15);
+  const rows=students.map(s=>{
+    const last=s.conducta[0];
+    return `<tr>
+      <td><span class="student-id-badge">${s.id}</span></td>
+      <td>${s.nombre}</td>
+      <td>${s.conducta.length}</td>
+      <td>${last?`<span class="badge-conduct ${last.tipo}">${last.tipo}</span>`:'-'}</td>
+      <td>${last?last.fecha:'-'}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('conducta-admin-table').innerHTML=`
+    <table>
+      <thead><tr><th>Matrícula</th><th>Nombre</th><th>Registros</th><th>Último Tipo</th><th>Última Fecha</th></tr></thead>
+      <tbody>${rows||'<tr><td colspan="5" style="text-align:center;padding:20px;">Sin resultados</td></tr>'}</tbody>
+    </table>`;
+}
+function openConductaModal(){openModal('modal-conducta');}
+function saveConducta(){
+  const mat=document.getElementById('c-matricula').value.toUpperCase();
+  if(!DB[mat]){showToast('Matrícula no encontrada','error');return;}
+  DB[mat].conducta.unshift({
+    fecha:document.getElementById('c-fecha').value,
+    tipo:document.getElementById('c-tipo').value,
+    descripcion:document.getElementById('c-desc').value,
+  });
+  closeModal('modal-conducta');
+  renderConductaAdmin();
+  document.getElementById('c-matricula').value='';
+  document.getElementById('c-desc').value='';
+  showToast('Registro de conducta guardado ✓','success');
+}
+
+// COMMENTS ADMIN
+let commentStudentId=null, commentEvalNum=null;
+function findStudentComment(){
+  const search=document.getElementById('search-comments').value.toLowerCase().trim();
+  const evalNum=parseInt(document.getElementById('comment-eval').value)||1;
+  const s=Object.values(DB).find(s=>s.nombre.toLowerCase().includes(search)||s.id.toLowerCase()===search);
+  const editor=document.getElementById('comment-editor');
+  if(!s){showToast('Alumno no encontrado','error');editor.style.display='none';return;}
+  commentStudentId=s.id; commentEvalNum=evalNum;
+  editor.style.display='block';
+  const cfg=ADMIN_CONFIG[currentAdminRole];
+  document.getElementById('comment-student-info').innerHTML=`
+    <div style="background:var(--cream);padding:13px;border-radius:8px;display:flex;gap:13px;align-items:center;">
+      <div style="background:var(--navy);color:white;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">👤</div>
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--navy-deep);">${s.nombre}</div>
+        <div style="font-size:.78rem;color:var(--slate);">${s.id} · ${s.nivel} · Evaluación ${evalNum}</div>
+      </div>
+    </div>`;
+  document.getElementById('comment-text').value=s.calificaciones[evalNum].comentario||'';
+  document.getElementById('comment-text').disabled=!cfg.canEditComments;
+}
+function saveComment(){
+  if(!commentStudentId) return;
+  DB[commentStudentId].calificaciones[commentEvalNum].comentario=document.getElementById('comment-text').value;
+  showToast('Comentario guardado ✓','success');
+}
+
+// CAMBRIDGE ADMIN VIEW
+function renderCambridgeAdmin(){
+  const students=Object.values(DB);
+  const overview=cambridgeLevels.map(l=>{
+    const count=students.filter(s=>s.nivel===l.name||(s.nivel&&s.nivel.startsWith(l.code))).length;
+    return `<div class="camb-ov-card">
+      <div class="level-badge ${l.cls}" style="margin:0 auto 10px;width:44px;height:44px;">${l.code}</div>
+      <div class="lvl">${count}</div>
+      <div class="lname">${l.name}</div>
+      <div class="count">alumnos en este nivel</div>
+    </div>`;
+  }).join('');
+  document.getElementById('cambridge-overview').innerHTML=overview;
+}
+
+// ADMIN PANELS
+function showAdminPanel(name){
+  document.querySelectorAll('.admin-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.admin-nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  document.getElementById('nav-'+name).classList.add('active');
+  if(name==='grades') renderGradesAdmin();
+  if(name==='payments') renderPaymentsAdmin();
+  if(name==='conducta-admin') renderConductaAdmin();
+}
+
+// ═══════════════════════════════════════════
+//  UTILS
+// ═══════════════════════════════════════════
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+document.querySelectorAll('.modal-overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o) o.classList.remove('open');});
+});
+
+let toastTimeout;
+function showToast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast show '+(type||'');
+  clearTimeout(toastTimeout);
+  toastTimeout=setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+document.getElementById('pass-alumno').addEventListener('keydown',e=>{if(e.key==='Enter')loginAlumno();});
+document.getElementById('pass-admin').addEventListener('keydown',e=>{if(e.key==='Enter')loginAdmin();});
+document.getElementById('matricula-input').addEventListener('keydown',e=>{if(e.key==='Enter')loginAlumno();});
+
+// ═══════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════
+initDB();
+</script>
+</body>
+</html>
